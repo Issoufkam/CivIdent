@@ -35,10 +35,10 @@
             <a class="nav-link active" href="{{ route('accueil') }}">Accueil</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#about">À propos</a>
+            <a class="nav-link" href="{{ route('propos') }}">À propos</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#contact">Contacts</a>
+            <a class="nav-link" href="{{ route('contact') }}">Contacts</a>
           </li>
           <li class="nav-item ms-lg-3">
                   <a class="nav-link" href="{{ route('login') }}">

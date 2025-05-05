@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 
 // Routes d'accueil et d'authentification
 Route::get('/', [HomeController::class, 'index'])->name('accueil');
+Route::get('/propos', [HomeController::class, 'propos'])->name('propos');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 // Registration routes
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register.form'); // Display the form
