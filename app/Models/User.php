@@ -9,20 +9,18 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class Utilisateur extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    use HasRoles;
+    use HasFactory, Notifiable, HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $guard_name = 'web'; // For Spatie
+
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -35,13 +33,20 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function citoyen()
+    {
+        return $this->hasOne(Citoyen::class);
+    }
+
+    public function agent()
+    {
+        return $this->hasOne(Agent::class);
+    }
+
+    // Remove the custom hasRole method to avoid conflicts with Spatie
 }
