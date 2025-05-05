@@ -32,7 +32,7 @@
   </div>
 
   <!-- Why Choose Us Section -->
-  <div class="why-choose-section py-5">
+  <div class="why-choose-section bg-white py-5">
     <div class="container">
       <div class="row justify-content-between">
         <div class="col-lg-6">
@@ -171,7 +171,7 @@
   
 
   <!-- Start Blog Section -->
-  <div class="blog-section">
+  <div class="blog-section bg-white">
     <div class="container">
         <h1 class="mb-5">Demander un acte</h1>
         <div class="row">
