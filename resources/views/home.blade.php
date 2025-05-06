@@ -1,8 +1,8 @@
- 
+
 @extends('layouts.app')
 @section('content')
  <!--Debut de contenu -->
-  
+
  <!-- Hero Section -->
  <div class="hero text-white" >
     <div class="container">
@@ -91,10 +91,10 @@
 <div class="testimonial-section py-5 bg-light">
     <div class="container">
       <h2 class="text-center h1 mb-5">Témoignages</h2>
-  
+
       <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-  
+
           <!-- Témoignage 1 -->
           <div class="carousel-item active">
             <div class="testimonial-block text-center">
@@ -108,12 +108,12 @@
                   <i class="fas fa-star"></i>
                   <i class="fas fa-star"></i>
                   <i class="fas fa-star"></i>
-                  
+
                 </div>
               </div>
             </div>
           </div>
-  
+
           <!-- Témoignage 2 -->
           <div class="carousel-item">
             <div class="testimonial-block text-center">
@@ -133,7 +133,7 @@
               </div>
             </div>
           </div>
-  
+
           <!-- Témoignage 3 -->
           <div class="carousel-item">
             <div class="testimonial-block text-center">
@@ -152,9 +152,9 @@
               </div>
             </div>
           </div>
-  
+
         </div>
-  
+
         <!-- Contrôles -->
         <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon"></span>
@@ -165,10 +165,10 @@
           <span class="visually-hidden">Suivant</span>
         </button>
       </div>
-  
+
     </div>
   </div>
-  
+
 
   <!-- Start Blog Section -->
   <div class="blog-section bg-white">
@@ -180,9 +180,9 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc (3).jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html">Extrait de naissance</a></h3>
+                        <h3><a href="{{ route('citoyen.demande.naissance') }}">Extrait de naissance</a></h3>
                         <div class="meta">
-                            <span>Notes <a href="#"></a></span>
+                            <span>Notes <a href="}"></a></span>
                             <span>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
@@ -191,8 +191,8 @@
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
-                                
-                            
+
+
                             </span>
                         </div>
                     </div>
@@ -203,15 +203,15 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html">Acte de mariage</a></h3>
+                        <h3><a href="{{ route('citoyen.demande.mariage') }}">Acte de mariage</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
-                                
-                            
+
+
                             </span>
                         </div>
                     </div>
@@ -222,7 +222,7 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc4.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html"> Acte de décès</a></h3>
+                        <h3><a href="{{ route('citoyen.demande.deces') }}"> Acte de décès</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -236,7 +236,7 @@
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
-                            
+
                             </span>
                         </div>
                     </div>
@@ -249,7 +249,7 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="./img/img1.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html">Certificat de vie</a></h3>
+                        <h3><a href="{{ route('citoyen.demande.certificat_vie') }}">Certificat de vie</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -266,7 +266,7 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="../img/dossier 1.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html">Certification de résidence</a></h3>
+                        <h3><a href="{{ route('citoyen.demande.certificat_residence') }}">Certification de résidence</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -275,8 +275,8 @@
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
-                                
-                            
+
+
                             </span>
                         </div>
                     </div>
@@ -287,7 +287,7 @@
                 <div class="post-entry">
                     <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc 6.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="pages/connexion.html">Certification de célibat </a></h3>
+                        <h3><a href="{{ route('citoyen.demande.certificat_celibat') }}">Certification de célibat </a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -297,7 +297,7 @@
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
-                                
+
                             </span>
                         </div>
                     </div>

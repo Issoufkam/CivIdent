@@ -2,7 +2,7 @@
 @section('content')
 <div class="container main-container py-4">
     <h1 class="text-center mb-4 fade-in">Demande d'Acte Extrait de Naissance</h1>
-    
+
     <div class="form-container fade-in">
       <div class="row g-0">
         <!-- Left Side - Image and Text -->
@@ -12,21 +12,21 @@
             <div class="hero-content">
               <h2 class="mb-4">Obtenez vos documents officiels</h2>
               <p class="mb-4">Simplifiez vos démarches administratives en effectuant votre demande en ligne.</p>
-              
+
               <div class="feature-item">
                 <div class="feature-icon">
                   <i class="fas fa-check"></i>
                 </div>
                 <span>Rapide et sécurisé</span>
               </div>
-              
+
               <div class="feature-item">
                 <div class="feature-icon">
                   <i class="fas fa-check"></i>
                 </div>
                 <span>Traitement prioritaire</span>
               </div>
-              
+
               <div class="feature-item">
                 <div class="feature-icon">
                   <i class="fas fa-check"></i>
@@ -36,7 +36,7 @@
             </div>
           </div>
         </div>
-        
+
         <!-- Right Side - Form -->
         <div class="col-md-7">
           <div class="form-section">
@@ -46,9 +46,10 @@
               <h3 class="mb-3">Demande Envoyée !</h3>
               <p class="text-muted">Votre demande a été soumise avec succès. Vous recevrez bientôt un email de confirmation.</p>
             </div>
-            
+
             <!-- Form Content -->
-            <form id="birthCertForm">
+            <form id="birthCertForm" method="POST" action="{{ route('citoyen.demandes.store') }}" enctype="multipart/form-data">
+                @csrf
               <!-- Personal Information -->
               <div class="mb-4">
                 <h3 class="section-title mb-3">Informations Personnelles</h3>
