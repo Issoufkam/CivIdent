@@ -5,7 +5,7 @@
 <!-- Header -->
 <header class="py-4 bg-light border-bottom">
         <div class="container">
-            <h1 class="mb-0 text-primary fw-bold">A propos de nous</h1>
+            <h1 class="mb-0 text-success fw-bold">A propos de nous</h1>
         </div>
     </header>
 
@@ -159,7 +159,7 @@
                     
                     <div class="col-lg-6">
                         <div class="p-4 bg-white rounded-3 shadow-sm h-100">
-                            <h4 class="text-primary mb-4">Avantages de notre processus</h4>
+                            <h4 class="text-dark fw-bold mb-4">Avantages de notre processus</h4>
                             
                             <div class="d-flex align-items-center mb-3">
                                 <i class="fas fa-check-circle text-success me-2"></i>
@@ -192,14 +192,14 @@
         </section>
 
         <!-- Values Section -->
-        <section class="values-section mb-5 py-4">
+        <section class="values-section   mb-5 py-4">
             <h2 class="fw-bold mb-4">Nos valeurs</h2>
             
             <div class="row g-4">
                 <!-- Value 1 -->
                 <div class="col-md-6 col-lg-3">
                     <div class="card value-card border-0 shadow-sm text-center p-4">
-                        <div class="text-primary mb-3 d-flex justify-content-center">
+                        <div class="text-success mb-3 d-flex justify-content-center">
                             <i class="fas fa-shield-alt fa-3x"></i>
                         </div>
                         <h3 class="card-title h5 fw-bold">Sécurité</h3>
@@ -210,7 +210,7 @@
                 <!-- Value 2 -->
                 <div class="col-md-6 col-lg-3">
                     <div class="card value-card border-0 shadow-sm text-center p-4">
-                        <div class="text-primary mb-3 d-flex justify-content-center">
+                        <div class="text-success mb-3 d-flex justify-content-center">
                             <i class="fas fa-clock fa-3x"></i>
                         </div>
                         <h3 class="card-title h5 fw-bold">Efficacité</h3>
@@ -221,7 +221,7 @@
                 <!-- Value 3 -->
                 <div class="col-md-6 col-lg-3">
                     <div class="card value-card border-0 shadow-sm text-center p-4">
-                        <div class="text-primary mb-3 d-flex justify-content-center">
+                        <div class="text-success mb-3 d-flex justify-content-center">
                             <i class="fas fa-user-check fa-3x"></i>
                         </div>
                         <h3 class="card-title h5 fw-bold">Transparence</h3>
@@ -232,7 +232,7 @@
                 <!-- Value 4 -->
                 <div class="col-md-6 col-lg-3">
                     <div class="card value-card border-0 shadow-sm text-center p-4">
-                        <div class="text-primary mb-3 d-flex justify-content-center">
+                        <div class="text-success mb-3 d-flex justify-content-center">
                             <i class="fas fa-handshake fa-3x"></i>
                         </div>
                         <h3 class="card-title h5 fw-bold">Engagement</h3>

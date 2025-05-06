@@ -18,11 +18,11 @@ class HomeController extends Controller
 
     public function propos()
     {
-        return view('apropos');  // Retourne la vue propos
+        return view('pages.apropos');  // Retourne la vue propos
     }
 
     public function contact()
     {
-        return view('contacts');  // Retourne la vue contact
+        return view('pages.contacts');  // Retourne la vue contact
     }
 }

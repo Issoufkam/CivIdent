@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
 <!-- Hero Section -->
-<section class="py-5 mb-4 bg-primary">
+<section class="py-5 mb-4 bg-dark">
+  
+
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-auto text-center py-4">
@@ -229,6 +231,5 @@
           </div>
         </div>
       </div>
-
 
  @endsection
