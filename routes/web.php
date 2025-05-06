@@ -50,7 +50,22 @@ Route::middleware(['auth', 'role:agent'])->prefix('agent')->name('agent.')->grou
 // Citoyen Routes
 Route::get('/citoyen/dashboard', [CitoyenController::class, 'dashboard'])->name('citoyen.dashboard');
 Route::get('/citoyen/demandes', [CitoyenController::class, 'index'])->name('citoyen.demandes.index');
+Route::get('/citoyen/demandes/naissance', [CitoyenController::class, 'actes'])->name('citoyen.demandes.naissance');
+Route::get('/citoyen/demandes/create', [CitoyenController::class, 'create'])->name('citoyen.demandes.create');
+Route::post('/citoyen/demandes', [CitoyenController::class, 'store'])->name('citoyen.demandes.store');
+Route::get('/citoyen/demandes/{id}', [CitoyenController::class, 'show'])->name('citoyen.demandes.show');
+Route::get('/citoyen/demandes/{id}/edit', [CitoyenController::class, 'edit'])->name('citoyen.demandes.edit');
+Route::put('/citoyen/demandes/{id}', [CitoyenController::class, 'update'])->name('citoyen.demandes.update');
 Route::get('paiements', [CitoyenController::class, 'paiements'])->name('paiements.index');
+Route::middleware(['auth', 'verified'])->prefix('citoyen')->name('citoyen.')->group(function () {
+    Route::get('/demande/naissance', [CitoyenController::class, 'formNaissance'])->name('demande.naissance');
+    Route::get('/demande/acteMariage', [CitoyenController::class, 'formMariage'])->name('demande.mariage');
+    Route::get('/demande/acteDeces', [CitoyenController::class, 'formDeces'])->name('demande.deces');
+    Route::get('/demande/acte-divorce', [CitoyenController::class, 'formDivorce'])->name('demande.divorce');
+    Route::get('/demande/acte-celibat', [CitoyenController::class, 'formCelibat'])->name('demande.certificat_celibat');
+    Route::get('/demande/acte-vie', [CitoyenController::class, 'formVie'])->name('demande.certificat_vie');
+    Route::get('/demande/acte-residence', [CitoyenController::class, 'formResidence'])->name('demande.certificat_residence');
+});
 
 Route::middleware(['auth', 'role:citoyen'])->prefix('citoyen')->name('citoyen.')->group(function () {
     //Route::get('/dashboard', [CitoyenController::class, 'index'])->name('dashboard');

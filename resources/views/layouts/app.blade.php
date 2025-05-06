@@ -42,11 +42,13 @@
           <li class="nav-item">
             <a class="nav-link" href="{{ route('contact') }}">Contacts</a>
           </li>
-          <li class="nav-item ms-lg-3">
-                  <a class="nav-link" href="{{ route('login') }}">
-                      <i class="fas fa-user"></i> 
-                  </a>
-              </li>
+        @guest
+            <li class="nav-item ms-lg-3">
+                <a class="nav-link" href="{{ route('login') }}">
+                    <i class="fas fa-user"></i>
+                </a>
+            </li>
+        @endguest
           @auth
               @php
                 $role = Auth::user()->getRoleNames()->first();
@@ -60,7 +62,7 @@
 
               <li class="nav-item ms-lg-3">
                   <a class="nav-link" href="{{ $dashboardRoute }}">
-                      <i class="fas fa-user"></i> Tableau de bord
+                      <i class="fas fa-user"></i> Mon Espace
                   </a>
               </li>
 
@@ -78,16 +80,6 @@
       </div>
     </div>
   </nav>
-  
-  <!-- Auth info -->
-  <header class="text-center mt-3">
-    @auth
-    <p>Connecté en tant que : 
-      <strong>{{ Auth::user()->prenom }} {{ Auth::user()->nom }}</strong> 
-      ({{ Auth::user()->getRoleNames()->first() }})
-    </p>
-    @endauth
-  </header>
 
   <!-- Contenu principal -->
   <main class="my-4">
