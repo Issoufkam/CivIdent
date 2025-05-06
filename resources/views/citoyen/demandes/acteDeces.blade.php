@@ -12,7 +12,7 @@
                     <img src="/img/décès10.jpg" alt="Documents officiels" class="hero-img">
                     <h2 class="h4 mb-4">Service d'État Civil</h2>
                     <p class="mb-4">Facilitez vos démarches administratives en effectuant votre demande d'acte de décès en ligne.</p>
-                    
+
                     <div class="feature-item">
                         <div class="feature-icon">
                             <i class="fas fa-check"></i>
@@ -37,7 +37,7 @@
             <!-- Right Side - Form -->
             <div class="col-md-8">
                 <div class="form-section">
-                    <form id="deathCertForm" method="POST" action="{{ route('death-certificate.store') }}" enctype="multipart/form-data">
+                    <form id="birthCertForm" method="POST" action="{{ route('citoyen.demandes.store') }}" enctype="multipart/form-data">
                         @csrf
                         <!-- Informations du Défunt -->
                         <div class="mb-4">
@@ -177,7 +177,7 @@
             alert('Formulaire soumis avec succès!');
         });
     </script>
-    
+
 </body>
 
 
