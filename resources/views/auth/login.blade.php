@@ -29,11 +29,11 @@
             <button type="submit" class="btn btn-dark w-100">Connexion</button>
 
             <p class="text-center">
-                <a class="text-success" href="{{ route('password.phone.request') }}">Mot de passe oublié ?</a>
+                <a class="text-success" href="{{ route('register') }}">Inscrivez-vous ici</a>
             </p>
 
             <p class="text-center">
-                <a class="text-success" href="#">Mot de passe oublié ?</a>
+                <a class="text-success" href="{{ route('password.phone.request') }}">Mot de passe oublié ?</a>
             </p>
         </form>
     </div>

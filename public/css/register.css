@@ -1,27 +1,28 @@
-html, body {
-  height: 100%;
-  margin: 0;
-  background: #3b5d50;
-}
 
-.form-container {
-  height: 100vh;
-}
+    .register-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-.navbar-brand span {
-  color: #7f8d88;
-}
+    .register-card {
+        max-width: 900px;
+        width: 100%;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+    }
 
-.form-box {
-  max-width: 400px;
-  width: 100%;
-  padding: 2rem;
-  border-radius: 15px;
-  background: white;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
+    .register-image {
+        background: url('/img/img21.jpg') center center no-repeat;
+        background-size: cover;
+        min-height: 100%;
+    }
 
-.form-control:focus {
-  box-shadow: none;
-  border-color: #198754;
-}
+    @media (max-width: 768px) {
+        .register-image {
+            display: none;
+        }
+    }
+
