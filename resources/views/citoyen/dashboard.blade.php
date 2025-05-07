@@ -120,7 +120,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="#" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demande.mariage') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -135,7 +135,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="#" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demande.deces') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>

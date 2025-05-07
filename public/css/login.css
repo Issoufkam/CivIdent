@@ -1,23 +1,24 @@
-body, html {
-    height: 100%;
-    margin: 0;
-    background: #3b5d50;
-  }
-.form-container {
-   height: 100vh;
-}
-  .navbar-brand span {
-          color:#7f8d88
-      }
-  .form-box {
-    max-width: 400px;
-    width: 100%;
-    padding: 2rem;
-    border-radius: 15px;
-    background: white;
-    box-shadow: 0 0 20px rgba(0,0,0,0.1);
-  }
-  .form-control:focus {
-    box-shadow: none;
-    border-color: #198754;
-  }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      background: #3b5d50;
+    }
+    .form-container {
+      height: 100vh;
+    }
+    .navbar-brand span {
+            color:#7f8d88
+        }
+    .form-box {
+      max-width: 400px;
+      width: 100%;
+      padding: 2rem;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .form-control:focus {
+      box-shadow: none;
+      border-color: #198754;
+    }

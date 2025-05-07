@@ -2,7 +2,7 @@
     /* à propos  */
     .hero {
       padding: 80px 0;
-      background-color: #3b5d50;
+      background-color: #3b5d5022;
     }
 
     #entete{
@@ -78,7 +78,7 @@
     }
 
     .footer-section {
-      background-color: #3b5d50;
+      background-color: #2c3237;
       color: white;
       padding: 80px 0 20px;
     }

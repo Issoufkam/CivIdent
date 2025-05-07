@@ -9,13 +9,18 @@
   <meta name="description" content="Digit-Ivoire - Obtenez vos documents officiels en quelques clics">
   <meta name="keywords" content="documents officiels, Côte d'Ivoire, services administratifs">
 
-  <title>Digit-Ivoire Accueil</title>
+  <title>Digit-Ivoire</title>
 
   <!-- CSS -->
   <link rel="stylesheet" href="{{ asset('css/main.css') }}">
   <link rel="stylesheet" href="{{ asset('css/login.css') }}">
   <link rel="stylesheet" href="{{ asset('css/register.css') }}">
   <link rel="stylesheet" href="{{ asset('css/apropos.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/acteNaissance.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/acteDécès.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/acteMariage.css') }}">
+  <!--liens boostrap-->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -62,7 +67,7 @@
 
               <li class="nav-item ms-lg-3">
                   <a class="nav-link" href="{{ $dashboardRoute }}">
-                      <i class="fas fa-user"></i> Mon Espace
+                       Mon Espace
                   </a>
               </li>
 
@@ -82,84 +87,84 @@
   </nav>
 
   <!-- Contenu principal -->
-  <main class="my-4">
-    @yield('content')
-  </main>
+  <!-- Main Content -->
+  <main class="flex-grow-1 py-4">
+        @yield('content')
+    </main>
 
-  <!-- Footer -->
-  <footer class="footer-section bg-dark text-light pt-5" id="contact">
-    <div class="container">
-      <div class="row g-4 mb-5">
-        <div class="col-lg-4">
-          <h2 class="h4 text-white mb-4">Contactez-nous !</h2>
-          <p class="text-white-50 mb-4">
-            Notre équipe est à votre disposition pour répondre à toutes vos questions.
-          </p>
-          <div class="custom-social">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          </div>
-        </div>
+    <!-- Footer -->
+    <footer class="footer-section bg-dark text-light pt-5" id="contact">
+        <div class="container">
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4">
+                    <h2 class="h4 text-white mb-4">Contactez-nous !</h2>
+                    <p class="text-white-50 mb-4">Notre équipe est à votre disposition pour répondre à toutes vos questions.</p>
+                    <div class="custom-social">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
 
-        <div class="col-lg-5">
-          <div class="row">
-            <div class="col-6 col-sm-4">
-              <h3 class="h6 text-white mb-3">Navigation</h3>
-              <ul class="list-unstyled">
-                <li><a href="#about" class="text-white-50">À propos</a></li>
-                <li><a href="{{ route('login') }}" class="text-white-50">Connexion</a></li>
-                <li><a href="#contact" class="text-white-50">Contact</a></li>
-              </ul>
+                <div class="col-lg-5">
+                    <div class="row">
+                        <div class="col-6 col-sm-4">
+                            <h3 class="h6 text-white mb-3">Navigation</h3>
+                            <ul class="list-unstyled">
+                                <li><a href="#about" class="text-white-50">À propos</a></li>
+                                <li><a href="{{ route('login') }}" class="text-white-50">Connexion</a></li>
+                                <li><a href="#contact" class="text-white-50">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <h3 class="h6 text-white mb-3">Support</h3>
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-white-50">Centre d'aide</a></li>
+                                <li><a href="#" class="text-white-50">Chat en direct</a></li>
+                                <li><a href="#" class="text-white-50">FAQ</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6 col-sm-4">
+                            <h3 class="h6 text-white mb-3">Légal</h3>
+                            <ul class="list-unstyled">
+                                <li><a href="#" class="text-white-50">Conditions d'utilisation</a></li>
+                                <li><a href="#" class="text-white-50">Confidentialité</a></li>
+                                <li><a href="#" class="text-white-50">Mentions légales</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3">
+                    <h5 class="mb-3 fw-bold text-white">Contact</h5>
+                    <p class="mb-2 text-white-50"><i class="fas fa-map-marker-alt me-2"></i>Abidjan, Côte d'Ivoire</p>
+                    <p class="mb-2 text-white-50"><i class="fas fa-phone me-2"></i>+225 XX XX XX XX</p>
+                    <p class="mb-2 text-white-50"><i class="fas fa-envelope me-2"></i>contact@digit-ivoire.ci</p>
+                </div>
             </div>
-            <div class="col-6 col-sm-4">
-              <h3 class="h6 text-white mb-3">Support</h3>
-              <ul class="list-unstyled">
-                <li><a href="#" class="text-white-50">Centre d'aide</a></li>
-                <li><a href="#" class="text-white-50">Chat en direct</a></li>
-                <li><a href="#" class="text-white-50">FAQ</a></li>
-              </ul>
+
+            <div class="border-top border-secondary pt-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="text-white-50 mb-0">
+                            &copy; <script>document.write(new Date().getFullYear());</script> Tous droits réservés — Digit-Ivoire
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item"><a href="#" class="text-white-50">Conditions</a></li>
+                            <li class="list-inline-item ms-3"><a href="#" class="text-white-50">Confidentialité</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-6 col-sm-4">
-              <h3 class="h6 text-white mb-3">Légal</h3>
-              <ul class="list-unstyled">
-                <li><a href="#" class="text-white-50">Conditions d'utilisation</a></li>
-                <li><a href="#" class="text-white-50">Confidentialité</a></li>
-                <li><a href="#" class="text-white-50">Mentions légales</a></li>
-              </ul>
-            </div>
-          </div>
         </div>
+    </footer>
 
-        <div class="col-lg-3">
-          <h5 class="mb-3 fw-bold text-white">Contact</h5>
-          <p class="mb-2 text-white-50"><i class="fas fa-map-marker-alt me-2"></i>Abidjan, Côte d'Ivoire</p>
-          <p class="mb-2 text-white-50"><i class="fas fa-phone me-2"></i>+225 XX XX XX XX</p>
-          <p class="mb-2 text-white-50"><i class="fas fa-envelope me-2"></i>contact@digit-ivoire.ci</p>
-        </div>
-      </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-      <div class="border-top border-secondary pt-4">
-        <div class="row align-items-center">
-          <div class="col-md-6 text-center text-md-start">
-            <p class="text-white-50 mb-0">
-              &copy; <script>document.write(new Date().getFullYear());</script> Tous droits réservés — Digit-Ivoire
-            </p>
-          </div>
-          <div class="col-md-6 text-center text-md-end">
-            <ul class="list-inline mb-0">
-              <li class="list-inline-item"><a href="#" class="text-white-50">Conditions</a></li>
-              <li class="list-inline-item ms-3"><a href="#" class="text-white-50">Confidentialité</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="{{ asset('js/script.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>
