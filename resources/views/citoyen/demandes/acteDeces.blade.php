@@ -4,12 +4,10 @@
 <body class="bg-light">
     <div class="container py-5">
         <h1 class="text-center mb-4 fade-in">Demande d'Acte de Décès</h1>
-
         <div class="row g-0 shadow rounded-3 overflow-hidden fade-in">
             <!-- Left Side - Hero Section -->
             <div class="col-md-4">
                 <div class="hero-section">
-                    <img src="/img/décès10.jpg" alt="Documents officiels" class="hero-img">
                     <h2 class="h4 mb-4">Service d'État Civil</h2>
                     <p class="mb-4">Facilitez vos démarches administratives en effectuant votre demande d'acte de décès en ligne.</p>
 
@@ -160,7 +158,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-success w-100 py-2">
+                        <button type="submit" class="btn btn-dark w-100 py-2">
                             Soumettre la Demande
                         </button>
                     </form>

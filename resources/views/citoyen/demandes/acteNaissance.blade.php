@@ -122,7 +122,7 @@
                   Je certifie que les informations fournies sont exactes
                 </label>
               </div>
-              <button type="submit" class="btn btn-primary w-100 py-2">Soumettre la Demande</button>
+              <button type="submit" class="btn btn-dark w-100 py-2">Soumettre la Demande</button>
             </div>
           </form>
         </div>
