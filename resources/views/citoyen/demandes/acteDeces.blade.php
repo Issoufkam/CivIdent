@@ -38,35 +38,36 @@
                     <form id="birthCertForm" method="POST" action="{{ route('citoyen.demandes.store') }}" enctype="multipart/form-data">
                         @csrf
                         <!-- Informations du Défunt -->
-                        <div class="mb-4">
-                            <h3 class="section-title">Informations du Défunt</h3>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label">Nom du Défunt</label>
-                                    <input type="text" class="form-control" name="deceased_name" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Prénoms du Défunt</label>
-                                    <input type="text" class="form-control" name="deceased_firstname" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Date de Décès</label>
-                                    <input type="date" class="form-control" name="death_date" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Lieu de Décès</label>
-                                    <input type="text" class="form-control" name="death_place" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">Cause du Décès</label>
-                                    <input type="text" class="form-control" name="death_cause">
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label">N° du Registre de Décès</label>
-                                    <input type="text" class="form-control" name="register_number" required>
-                                </div>
-                            </div>
-                        </div>
+                      <div class="mb-4">
+                                 <h3 class="section-title">Informations du Défunt</h3>
+                        <div class="row g-3">
+                               <div class="col-md-6">
+                                   <label class="form-label" for="deceased_name">Nom du Défunt</label>
+                                    <input type="text" class="form-control" id="deceased_name" name="deceased_name" required>
+                              </div>
+                              <div class="col-md-6">
+                                 <label class="form-label" for="deceased_firstname">Prénoms du Défunt</label>
+                                  <input type="text" class="form-control" id="deceased_firstname" name="deceased_firstname" required>
+                             </div>
+                             <div class="col-md-6">
+                                   <label class="form-label" for="death_date">Date de Décès</label>
+                                   <input type="date" class="form-control" id="death_date" name="death_date" required>
+                               </div>
+                               <div class="col-md-6">
+                                     <label class="form-label" for="death_place">Lieu de Décès</label>
+                                      <input type="text" class="form-control" id="death_place" name="death_place" required>
+                               </div>
+                               <div class="col-md-6">
+                                     <label class="form-label" for="death_cause">Cause du Décès</label>
+                                     <input type="text" class="form-control" id="death_cause" name="death_cause">
+                               </div>
+                               <div class="col-md-6">
+                                     <label class="form-label" for="register_number">N° du Registre de Décès</label>
+                                     <input type="text" class="form-control" id="register_number" name="register_number" required>
+                               </div>
+                           </div>
+                     </div>
+
 
                         <!-- Informations du Demandeur -->
                         <div class="mb-4">
