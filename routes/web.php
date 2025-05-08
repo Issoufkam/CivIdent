@@ -50,7 +50,7 @@ Route::middleware(['auth', 'role:agent'])->prefix('agent')->name('agent.')->grou
 // Citoyen Routes
 Route::get('/citoyen/dashboard', [CitoyenController::class, 'dashboard'])->name('citoyen.dashboard');
 Route::get('/citoyen/demandes', [CitoyenController::class, 'index'])->name('citoyen.demandes.index');
-Route::get('/citoyen/demandes/naissance', [CitoyenController::class, 'actes'])->name('citoyen.demandes.naissance');
+Route::get('/citoyen/demandes/naissance', [CitoyenController::class, 'storeBirthRequest'])->name('citoyen.demandes.naissance.store');
 Route::get('/citoyen/demandes/create', [CitoyenController::class, 'create'])->name('citoyen.demandes.create');
 Route::post('/citoyen/demandes', [CitoyenController::class, 'store'])->name('citoyen.demandes.store');
 Route::get('/citoyen/demandes/{id}', [CitoyenController::class, 'show'])->name('citoyen.demandes.show');
