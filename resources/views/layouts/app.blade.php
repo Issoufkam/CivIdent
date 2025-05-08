@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="{{ asset('css/acteNaissance.css') }}">
   <link rel="stylesheet" href="{{ asset('css/acteDécès.css') }}">
   <link rel="stylesheet" href="{{ asset('css/acteMariage.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/certifVie.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/certifEntretien.css') }}">
   <!--liens boostrap-->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->

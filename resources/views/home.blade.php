@@ -102,7 +102,7 @@
                 "J'avais fait ma demande d'état civil en ligne, et en quelques jours seulement, j'ai reçu mon extrait de naissance directement en format PDF."
               </p>
               <div class="author-info">
-                <img src="img/person-1.png" alt="Fatou Coulibaly" class="mb-3 rounded-circle" width="80" height="80">
+                <img src="img/identité4.jpg" alt="Fatou Coulibaly" class="mb-3 rounded-circle" width="80" height="80">
                 <h3 class="h5">Fatou Coulibaly</h3>
                 <div class="text-warning">
                   <i class="fas fa-star"></i>
@@ -121,7 +121,7 @@
                 "Un service exceptionnel ! Rapide, clair et efficace. Je recommande vivement."
               </p>
               <div class="author-info">
-                <img src="img/person_2.jpg" alt="Jean Koffi" class="mb-3 rounded-circle" width="80" height="80">
+                <img src="img/identité3.jpg" alt="Jean Koffi" class="mb-3 rounded-circle" width="80" height="80">
                 <h3 class="h5">Jean Koffi</h3>
                 <div class="text-warning">
                   <i class="fas fa-star"></i>
@@ -141,8 +141,45 @@
                 "Grâce à votre plateforme, j'ai économisé du temps et de l'argent. Bravo pour cette belle initiative !"
               </p>
               <div class="author-info">
-                <img src="img/person_4.jpg" alt="Awa Traoré" class="mb-3 rounded-circle" width="80" height="80">
+                <img src="img/identité5.jpg" alt="Awa Traoré" class="mb-3 rounded-circle" width="80" height="80">
                 <h3 class="h5">Awa Traoré</h3>
+                <div class="text-warning">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="carousel-item">
+            <div class="testimonial-block text-center">
+              <p class="lead mb-4">
+                "ouais c'est faciiiiiiiiile !"
+              </p>
+              <div class="author-info">
+                <img src="img/identité2.jpg" alt="Awa Traoré" class="mb-3 rounded-circle" width="80" height="80">
+                <h3 class="h5">Diomandé edmond</h3>
+                <div class="text-warning">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-item">
+            <div class="testimonial-block text-center">
+              <p class="lead mb-4">
+                "trop perfomant cette plateforme!"
+              </p>
+              <div class="author-info">
+                <img src="img/identité1.jpg" alt="Awa Traoré" class="mb-3 rounded-circle" width="80" height="80">
+                <h3 class="h5">Fanck amani</h3>
                 <div class="text-warning">
                   <i class="fas fa-star"></i>
                   <i class="fas fa-star"></i>
@@ -178,9 +215,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc (3).jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc (3).jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.naissance') }}">Extrait de naissance</a></h3>
+                        <h3><a href="{{ route('login') }}">Extrait de naissance</a></h3>
                         <div class="meta">
                             <span>Notes <a href="}"></a></span>
                             <span>
@@ -201,9 +238,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.mariage') }}">Acte de mariage</a></h3>
+                        <h3><a href="{{ route('login') }}">Acte de mariage</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -220,9 +257,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc4.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc4.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.deces') }}"> Acte de décès</a></h3>
+                        <h3><a href="{{ route('login') }}"> Acte de décès</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -247,9 +284,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="./img/img1.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="./img/img1.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.certificat_vie') }}">Certificat de vie</a></h3>
+                        <h3><a href="{{ route('login') }}">Certificat de vie</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -264,9 +301,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="../img/dossier 1.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="../img/dossier 1.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.certificat_residence') }}">Certification de résidence</a></h3>
+                        <h3><a href="{{ route('login') }}">Certification d'entretien</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -285,9 +322,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="pages/connexion.html" class="post-thumbnail"><img src="img/doc 6.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc 6.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('citoyen.demande.certificat_celibat') }}">Certification de célibat </a></h3>
+                        <h3><a href="{{ route('login') }}">Certification de non revenu </a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>

@@ -156,7 +156,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="#" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demande.vie') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -165,13 +165,13 @@
                 <div class="card document-card h-100">
                     <img src="{{ asset('img/dossier 1.jpeg') }}" alt="Certification de résidence" class="card-img-top">
                     <div class="card-body">
-                        <h5 class="card-title">Certification de résidence</h5>
+                        <h5 class="card-title">Certificat d'entretien</h5>
                         <div class="text-warning mb-3">
                             @for ($i = 0; $i < 5; $i++)
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="#" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demande.entretien') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -180,13 +180,13 @@
                 <div class="card document-card h-100">
                     <img src="{{ asset('img/doc 6.jpeg') }}" alt="Certification de célibat" class="card-img-top">
                     <div class="card-body">
-                        <h5 class="card-title">Certification de célibat</h5>
+                        <h5 class="card-title">Certificat de non revenu</h5>
                         <div class="text-warning mb-3">
                             @for ($i = 0; $i < 4; $i++)
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="#" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demande.revenu') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,108 @@
+
+    :root {
+      --orange: #FF8200;
+      --white: #FFFFFF;
+      --green: #009E60;
+      --primary: #FF8200;
+      --secondary: #009E60;
+      --dark: #333333;
+      --light: #F8F9FA;
+    }
+    
+    body {
+      background-color: #f5f5f5;
+      color: var(--dark);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, var(--orange), var(--white), var(--green));
+      background-size: 600% 600%;
+      animation: gradientAnimation 10s ease infinite;
+      padding: 2rem 0;
+      border-bottom: 5px solid var(--green);
+    }
+    
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .national-colors {
+      display: flex;
+      height: 10px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+    
+    .national-colors .orange { background-color: var(--orange); flex: 1; }
+    .national-colors .white { background-color: var(--white); flex: 1; }
+    .national-colors .green { background-color: var(--green); flex: 1; }
+    
+    .form-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .section-title {
+      color: var(--primary);
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+    
+    .required-field::after {
+      content: "*";
+      color: red;
+      margin-left: 4px;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
+    
+    .btn-primary:hover, .btn-primary:focus {
+      background-color: #e67700;
+      border-color: #e67700;
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+    }
+    
+    .btn-secondary:hover, .btn-secondary:focus {
+      background-color: #008750;
+      border-color: #008750;
+    }
+    
+    .dependent-card {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    
+    .footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 20px 0;
+      font-size: 14px;
+    }
+    
+    @media print {
+      .header, .footer, .btn, .no-print { display: none; }
+      .form-container {
+        box-shadow: none;
+        border: none;
+      }
+      .form-control { border: none; }
+      .section-title { color: black; }
+      body { background-color: white; }
+    }

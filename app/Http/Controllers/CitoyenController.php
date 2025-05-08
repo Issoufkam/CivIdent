@@ -201,34 +201,29 @@ class CitoyenController extends Controller
         return view('citoyen.demandes.acteDeces');
     }
     /**
-     * Affiche le formulaire de demande d'acte de divorce.
+     * Affiche le formulaire de demande d'acte de vie.
      */
-    public function formDivorce()
+    public function formVie()
     {
-        return view('citoyen.demandes.acteDivorce');
+        return view('citoyen.demandes.certifVie');
     }
 
     /**
-     * Affiche le formulaire de demande d'acte de celibat.
+     * Affiche le formulaire de demande d'entretien.
      */
-    public function formCelibat()
+    public function formEntretien()
     {
-        return view('citoyen.demandes.acteCelibat');
+        return view('citoyen.demandes.certifEntretien');
     }
 
     /**
      * Affiche le formulaire de demande d'acte de vie.
      */
-    public function formVie()
+    public function formRevenu()
     {
-        return view('citoyen.demandes.acteVie');
+        return view('citoyen.demandes.certifRevenu');
     }
 
-    /**
-     * Affiche le formulaire de demande d'acte de résidence.
-     */
-    public function formResidence()
-    {
-        return view('citoyen.demandes.acteResidence');
-    }
+
+    
 }
