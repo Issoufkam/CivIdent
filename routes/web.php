@@ -61,10 +61,9 @@ Route::middleware(['auth', 'verified'])->prefix('citoyen')->name('citoyen.')->gr
     Route::get('/demande/naissance', [CitoyenController::class, 'formNaissance'])->name('demande.naissance');
     Route::get('/demande/acteMariage', [CitoyenController::class, 'formMariage'])->name('demande.mariage');
     Route::get('/demande/acteDeces', [CitoyenController::class, 'formDeces'])->name('demande.deces');
-    Route::get('/demande/acte-divorce', [CitoyenController::class, 'formDivorce'])->name('demande.divorce');
-    Route::get('/demande/acte-celibat', [CitoyenController::class, 'formCelibat'])->name('demande.certificat_celibat');
-    Route::get('/demande/acte-vie', [CitoyenController::class, 'formVie'])->name('demande.certificat_vie');
-    Route::get('/demande/acte-residence', [CitoyenController::class, 'formResidence'])->name('demande.certificat_residence');
+    Route::get('/demande/certifVie', [CitoyenController::class, 'formVie'])->name('demande.vie');
+    Route::get('/demande/certifEntretien', [CitoyenController::class, 'formEntretien'])->name('demande.entretien');
+    Route::get('/demande/certifRevenu', [CitoyenController::class, 'formRevenu'])->name('demande.revenu');
 });
 
 Route::middleware(['auth', 'role:citoyen'])->prefix('citoyen')->name('citoyen.')->group(function () {

@@ -106,8 +106,74 @@
                     </div>
                 </div>
             @endforeach
+
+            <!-- Acte de décès (ajout Kassi) -->
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/doc4.jpeg') }}" alt="Acte de décès" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Acte de décès</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 4; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.deces') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section>
+        <h2 class="mb-4">Faire une demande de certificat</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/img1.jpeg') }}" alt="Certificat de vie" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Certificat de vie</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 3; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.vie') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/dossier 1.jpeg') }}" alt="Certification de résidence" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Certificat d'entretien</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 5; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.entretien') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/doc 6.jpeg') }}" alt="Certification de célibat" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Certificat de non revenu</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 4; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.revenu') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </main>
 @endsection
-    

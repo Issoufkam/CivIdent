@@ -8,7 +8,6 @@ use App\Models\Paiement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Enums\ActeType;
 use App\Enums\DemandeStatut;
@@ -195,9 +194,17 @@ class CitoyenController extends Controller
             'registerNumber' => 'required|integer',
             'purpose' => 'required|string',
             'copies' => 'required|integer|min:1|max:5',
+            'moyen_retrait' => 'required|string',
             'idFront' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'idBack' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048',
             'birthCopy' => 'required|file|mimes:jpg,jpeg,png,pdf|max:2048'
+        ]);
+    }
+
+    private function validateMarriageRequest(Request $request)
+    {
+        return $request->validate([
+            // À adapter selon les champs spécifiques du formulaire de mariage
         ]);
     }
 
@@ -244,13 +251,12 @@ class CitoyenController extends Controller
     }
 
     // ========================
-    // Vues
+    // Vues de formulaires
     // ========================
     public function formNaissance()
     {
         return view('citoyen.demandes.acteNaissance');
     }
-
 
     public function formMariage()
     {
@@ -262,24 +268,23 @@ class CitoyenController extends Controller
         return view('citoyen.demandes.acteDeces');
     }
 
-    public function formDivorce()
-    {
-        return view('citoyen.demandes.acteDivorce');
-    }
-
-
-    public function formCelibat()
-    {
-        return view('citoyen.demandes.certificat_celibat');
-    }
-
-    public function formCertificatResidence()
-    {
-        return view('citoyen.demandes.certificat_residence');
-    }
-
     public function formVie()
     {
-        return view('citoyen.demandes.acteVie');
+        return view('citoyen.demandes.certifVie');
+    }
+
+    public function formEntretien()
+    {
+        return view('citoyen.demandes.certifEntretien');
+    }
+
+    public function formRevenu()
+    {
+        return view('citoyen.demandes.certifRevenu');
+    }
+
+    public function formDivorce()
+    {
+        return view('citoyen.demandes.certifDivorce');
     }
 }
