@@ -5,7 +5,7 @@
 <div class="container my-5">
   <h2 class="mb-4 text-center section-title">Demande de Certificat de Non-Revenu</h2>
 
-  <form method="POST" action="{{ route('demande.nonrevenu.submit') }}">
+  <form method="POST" action="{{ route('demande.nonrevenu.revenu') }}">
     @csrf
 
     <div class="row g-3">
