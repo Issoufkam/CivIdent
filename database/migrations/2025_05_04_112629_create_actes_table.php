@@ -6,27 +6,34 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('actes', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_acte')->unique();
-            $table->date('date_etablissement');
+            $table->string('reference')->unique(); // Renommé depuis numero_acte
+            $table->string('type'); // Remplacer le type_acte_id par un enum
+            $table->string('nom');
+            $table->string('prenoms');
+            $table->string('email');
+            $table->string('telephone', 20);
+            $table->date('date_naissance');
+            $table->string('lieu_naissance');
+            $table->string('sous_prefecture');
+            $table->enum('genre', ['M', 'F']);
+            $table->string('nom_pere');
+            $table->string('nom_mere');
+            $table->integer('numero_registre');
+            $table->text('motif_demande');
+            $table->integer('nombre_copies');
+            $table->string('fichier_id_recto');
+            $table->string('fichier_id_verso');
+            $table->string('copie_extrait');
             $table->foreignId('citoyen_id')->constrained('citoyens')->onDelete('cascade');
-            $table->foreignId('type_acte_id')->constrained('type_actes');
             $table->foreignId('commune_id')->constrained('communes');
-            $table->text('fichier_pdf')->nullable(); // lien vers le PDF
             $table->timestamps();
         });
-        
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('actes');
