@@ -269,7 +269,7 @@
             <p>Le certificat d'entretien est généralement délivré sous 48 heures ouvrables.</p>
             
             <h5 class="fs-6 fw-bold mt-3"><i class="fas fa-money-bill-wave me-2 text-secondary"></i> Frais administratifs</h5>
-            <p>Le coût du certificat d'entretien est de 1000 FCFA, payable en espèces.</p>
+            <p>Le coût du certificat d'entretien est de 1000 FCFA, payable par mobile.</p>
           </div>
           <div class="col-md-6">
             <h5 class="fs-6 fw-bold"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> Où faire la demande?</h5>
