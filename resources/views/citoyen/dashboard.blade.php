@@ -46,7 +46,7 @@
                         <a class="nav-link" data-bs-toggle="tab" href="#certificat-vie">Certificat de vie</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#celibat">Certificat de célibat</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#celibat">Certificat de non revenu</a>
                     </li>
                 </ul>
 
@@ -122,6 +122,36 @@
                     </div>
                 </div>
             </div>
+            <!-- Extrait de naissance  (ajout Kassi) -->
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/doc.jpeg') }}" alt="Acte de décès" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Extrait de naissance</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 4; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.naissance') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
+            <!-- Acte de mariage (ajout Kassi) -->
+            <div class="col-md-4">
+                <div class="card document-card h-100">
+                    <img src="{{ asset('img/doc 10.jpeg') }}" alt="Acte de décès" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Acte de mariage</h5>
+                        <div class="text-warning mb-3">
+                            @for ($i = 0; $i < 4; $i++)
+                                <i class="fas fa-star"></i>
+                            @endfor
+                        </div>
+                        <a href="{{ route('citoyen.demande.mariage') }}" class="btn btn-outline-success w-100">Demander</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -146,7 +176,7 @@
 
             <div class="col-md-4">
                 <div class="card document-card h-100">
-                    <img src="{{ asset('img/dossier 1.jpeg') }}" alt="Certification de résidence" class="card-img-top">
+                    <img src="{{ asset('img/dossier 1.jpeg') }}" alt="Certification d'entretien" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">Certificat d'entretien</h5>
                         <div class="text-warning mb-3">
@@ -161,7 +191,7 @@
 
             <div class="col-md-4">
                 <div class="card document-card h-100">
-                    <img src="{{ asset('img/doc 6.jpeg') }}" alt="Certification de célibat" class="card-img-top">
+                    <img src="{{ asset('img/doc 6.jpeg') }}" alt="Certification de non revenu" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title">Certificat de non revenu</h5>
                         <div class="text-warning mb-3">

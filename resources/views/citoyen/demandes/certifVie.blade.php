@@ -211,7 +211,7 @@
             <p>Le certificat de vie est généralement délivré le jour même de la demande.</p>
             
             <h5 class="fs-6 fw-bold mt-3"><i class="fas fa-money-bill-wave me-2 text-secondary"></i> Frais administratifs</h5>
-            <p>Le coût du certificat de vie est de 500 FCFA, payable en espèces.</p>
+            <p>Le coût du certificat de vie est de 500 FCFA, payable par mobile.</p>
           </div>
           <div class="col-md-6">
             <h5 class="fs-6 fw-bold"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> Où faire la demande?</h5>
