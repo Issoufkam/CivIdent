@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+
+class RegisterUserController  extends Controller
 {
     public function showRegistrationForm()
     {
