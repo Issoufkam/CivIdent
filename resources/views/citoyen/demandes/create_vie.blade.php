@@ -22,11 +22,12 @@
     </div>
 
     <div class="form-container">
-      <form id="lifeCertificateForm" class="needs-validation" novalidate>
+      <form id="lifeCertificateForm" action="{{ route('citoyen.demandes.store') }}" method="POST" class="needs-validation" enctype="multipart/form-data">
+        @csrf
         <!-- Section 1: Informations du Demandeur -->
         <div class="section-personal mb-4">
           <h3 class="section-title">Informations du Demandeur</h3>
-          
+
           <div class="row g-3">
             <div class="col-md-4">
               <div class="form-floating mb-3">
@@ -94,7 +95,7 @@
         <!-- Section 2: Adresse & Contact -->
         <div class="section-address mb-4">
           <h3 class="section-title">Adresse & Contact</h3>
-          
+
           <div class="row g-3">
             <div class="col-md-6">
               <div class="form-floating mb-3">
@@ -116,7 +117,7 @@
         <!-- Section 3: Motif de la demande -->
         <div class="section-reason mb-4">
           <h3 class="section-title">Motif de la demande</h3>
-          
+
           <div class="row g-3">
             <div class="col-md-12">
               <div class="form-floating mb-3">
@@ -147,11 +148,11 @@
         <!-- Section 4: Documents requis -->
         <div class="section-documents mb-4">
           <h3 class="section-title">Documents requis</h3>
-          
+
           <div class="alert alert-info">
             <i class="fas fa-info-circle me-2"></i> Veuillez vous assurer d'avoir les documents suivants:
           </div>
-          
+
           <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="docCNI" required>
             <label class="form-check-label required-field" for="docCNI">
@@ -159,7 +160,7 @@
             </label>
             <div class="invalid-feedback">Ce document est obligatoire.</div>
           </div>
-          
+
           <div class="form-check mb-2">
             <input class="form-check-input" type="checkbox" id="docPhoto" required>
             <label class="form-check-label required-field" for="docPhoto">
@@ -172,12 +173,12 @@
         <!-- Section 5: Déclaration sur l'honneur -->
         <div class="section-declaration mb-4">
           <h3 class="section-title">Déclaration sur l'honneur</h3>
-          
+
           <div class="bg-light p-3 mb-3 rounded">
-            <p>Je soussigné(e), <span id="nomCompletAffichage">_______________________</span>, 
+            <p>Je soussigné(e), <span id="nomCompletAffichage">_______________________</span>,
                certifie sur l'honneur être en vie à ce jour et que les informations fournies dans ce formulaire sont exactes.</p>
           </div>
-          
+
           <div class="form-check mb-4">
             <input class="form-check-input" type="checkbox" id="acceptDeclaration" required>
             <label class="form-check-label required-field" for="acceptDeclaration">
@@ -209,14 +210,14 @@
           <div class="col-md-6">
             <h5 class="fs-6 fw-bold"><i class="fas fa-clock me-2 text-secondary"></i> Délai de traitement</h5>
             <p>Le certificat de vie est généralement délivré le jour même de la demande.</p>
-            
+
             <h5 class="fs-6 fw-bold mt-3"><i class="fas fa-money-bill-wave me-2 text-secondary"></i> Frais administratifs</h5>
             <p>Le coût du certificat de vie est de 500 FCFA, payable par mobile.</p>
           </div>
           <div class="col-md-6">
             <h5 class="fs-6 fw-bold"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> Où faire la demande?</h5>
             <p>Le certificat de vie peut être demandé à la mairie de votre lieu de résidence.</p>
-            
+
             <h5 class="fs-6 fw-bold mt-3"><i class="fas fa-question-circle me-2 text-secondary"></i> Besoin d'aide?</h5>
             <p>Pour toute assistance, contactez le service d'état civil de votre mairie.</p>
           </div>
@@ -229,7 +230,7 @@
 
   <!-- Bootstrap 5.3.0 JS with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  
+
   <!-- Custom JavaScript -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -237,7 +238,7 @@
       const nomInput = document.getElementById('nom');
       const prenomsInput = document.getElementById('prenoms');
       const nomCompletAffichage = document.getElementById('nomCompletAffichage');
-      
+
       function updateNomComplet() {
         const nomValue = nomInput.value.trim();
         const prenomsValue = prenomsInput.value.trim();
@@ -251,15 +252,15 @@
           nomCompletAffichage.textContent = '_______________________';
         }
       }
-      
+
       nomInput.addEventListener('input', updateNomComplet);
       prenomsInput.addEventListener('input', updateNomComplet);
-      
+
       // Show/hide "autre motif" field
       const motifSelect = document.getElementById('motifDemande');
       const autreMotifRow = document.getElementById('autreMotifRow');
       const autreMotifInput = document.getElementById('autreMotif');
-      
+
       motifSelect.addEventListener('change', function() {
         if (this.value === 'autre') {
           autreMotifRow.classList.remove('d-none');
@@ -269,20 +270,20 @@
           autreMotifInput.removeAttribute('required');
         }
       });
-      
+
       // Form validation
       const form = document.getElementById('lifeCertificateForm');
-      
+
       form.addEventListener('submit', function(event) {
         if (!form.checkValidity()) {
           event.preventDefault();
           event.stopPropagation();
-          
+
           // Find the first invalid element and focus it
           const firstInvalid = form.querySelector(':invalid');
           if (firstInvalid) {
             firstInvalid.focus();
-            
+
             // Also scroll to the invalid element
             const sectionTitle = firstInvalid.closest('div[class^="section-"]').querySelector('.section-title');
             if (sectionTitle) {
@@ -294,29 +295,29 @@
           event.preventDefault();
           alert('Formulaire validé avec succès ! En conditions réelles, votre demande serait soumise.');
         }
-        
+
         form.classList.add('was-validated');
       });
-      
+
       // Preview button functionality
       const previewBtn = document.getElementById('previewBtn');
-      
+
       previewBtn.addEventListener('click', function() {
         if (!form.checkValidity()) {
           form.classList.add('was-validated');
-          
+
           // Find the first invalid element and focus it
           const firstInvalid = form.querySelector(':invalid');
           if (firstInvalid) {
             firstInvalid.focus();
-            
+
             // Also scroll to the invalid element
             const sectionTitle = firstInvalid.closest('div[class^="section-"]').querySelector('.section-title');
             if (sectionTitle) {
               sectionTitle.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
           }
-          
+
           alert('Veuillez remplir tous les champs obligatoires avant de prévisualiser.');
         } else {
           window.print();

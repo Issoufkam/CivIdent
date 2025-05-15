@@ -215,9 +215,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc (3).jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('citoyen.demandes.create', ['type' => 'naissance']) }}" class="post-thumbnail"><img src="img/doc (3).jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('login') }}">Extrait de naissance</a></h3>
+                        <h3><a href="{{ route('citoyen.demandes.create', ['type' => 'naissance']) }}">Extrait de naissance</a></h3>
                         <div class="meta">
                             <span>Notes <a href="}"></a></span>
                             <span>
@@ -238,9 +238,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('citoyen.demandes.create', ['type' => 'mariage']) }}" class="post-thumbnail"><img src="img/doc.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('login') }}">Acte de mariage</a></h3>
+                        <h3><a href="{{ route('citoyen.demandes.create', ['type' => 'mariage']) }}">Acte de mariage</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>
@@ -257,9 +257,9 @@
 
             <div class="col-12 col-sm-6 col-md-4 mb-5">
                 <div class="post-entry">
-                    <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc4.jpeg" alt="Image" class="img-fluid"></a>
+                    <a href="{{ route('citoyen.demandes.create', ['type' => 'deces']) }}" class="post-thumbnail"><img src="img/doc4.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="{{ route('login') }}"> Acte de décès</a></h3>
+                        <h3><a href="{{ route('citoyen.demandes.create', ['type' => 'deces']) }}"> Acte de décès</a></h3>
                         <div class="meta">
                             <span>Notes <a href="#"></a></span>
                             <span>

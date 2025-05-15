@@ -2,19 +2,40 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Commune extends Model
 {
-    protected $fillable = ['nom_commune', 'region', 'code_postal'];
+    use HasFactory;
 
-    public function agents()
+    protected $fillable = [
+        'nom_commune',
+        'code',
+        'region',
+    ];
+
+    // Relations
+
+    public function users()
     {
-        return $this->hasMany(Agent::class);
+        return $this->hasMany(User::class);
     }
 
-    public function actes()
+    public function documents()
     {
-        return $this->hasMany(Acte::class);
+        return $this->hasMany(Document::class);
+    }
+    public function statistics()
+    {
+        return $this->hasMany(Statistic::class);
+    }
+    public function payments()
+    {
+        return $this->hasMany(Paiement::class);
+    }
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
     }
 }

@@ -1,96 +1,86 @@
 <!doctype html>
 <html lang="fr">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="author" content="Digit-Ivoire">
-  <link rel="shortcut icon" href="{{ asset('img/ivory.jpeg') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Digit-Ivoire">
+    <link rel="shortcut icon" href="{{ asset('img/ivory.jpeg') }}">
 
-  <meta name="description" content="Digit-Ivoire - Obtenez vos documents officiels en quelques clics">
-  <meta name="keywords" content="documents officiels, Côte d'Ivoire, services administratifs">
+    <meta name="description" content="Digit-Ivoire - Obtenez vos documents officiels en quelques clics">
+    <meta name="keywords" content="documents officiels, Côte d'Ivoire, services administratifs">
 
-  <title>Digit-Ivoire</title>
+    <title>Digit-Ivoire</title>
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/register.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/apropos.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/acteNaissance.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/acteDécès.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/acteMariage.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/certifVie.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/certifEntretien.css') }}">
-  <!--liens boostrap-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/apropos.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/acteNaissance.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/acteDécès.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/acteMariage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/certifVie.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/certifEntretien.css') }}">
+
+    <!-- Liens Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark" id="entete">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
-        Digit-<span class="fw-bold">Ivoire</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse fw-bold" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('accueil') }}">Accueil</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('propos') }}">À propos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{{ route('contact') }}">Contacts</a>
-          </li>
-        @guest
-            <li class="nav-item ms-lg-3">
-                <a class="nav-link" href="{{ route('login') }}">
-                    <i class="fas fa-user"></i>
-                </a>
-            </li>
-        @endguest
-          @auth
-              @php
-                $role = Auth::user()->getRoleNames()->first();
-                $dashboardRoute = match($role) {
-                    'admin' => route('admin.dashboard'),
-                    'agent' => route('agent.dashboard'),
-                    'citoyen' => route('citoyen.dashboard'),
-                    default => '#'
-                };
-              @endphp
 
-              <li class="nav-item ms-lg-3">
-                  <a class="nav-link" href="{{ $dashboardRoute }}">
-                       Mon Espace
-                  </a>
-              </li>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="entete">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ route('accueil') }}">
+                Digit-<span class="fw-bold">Ivoire</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse fw-bold" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('accueil') }}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('propos') }}">À propos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('contact') }}">Contacts</a>
+                    </li>
 
-              <li class="nav-item ms-lg-3">
-                  <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                      <i class="fas fa-sign-out-alt"></i> Se déconnecter
-                  </a>
-              </li>
+                    @if(Auth::user())
 
-              <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-              </form>
-          @endauth
-        </ul>
-      </div>
-    </div>
-  </nav>
+                    <li class="nav-item ms-lg-3">
+                            <a class="nav-link" href="{{ route('citoyen.dashboard') }}">Mon Espace</a>
+                        </li>
 
-  <!-- Contenu principal -->
-  <!-- Main Content -->
-  <main class="flex-grow-1 py-4">
+                        <li class="nav-item ms-lg-3">
+                            <a class="nav-link" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt"></i> Se déconnecter
+                            </a>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+
+                    @else
+                        <li class="nav-item ms-lg-3">
+                            <a class="nav-link" href="{{ route('login') }}">Se connecter</a>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="flex-grow-1 py-4">
         @yield('content')
     </main>
 
@@ -169,4 +159,5 @@
 
     @stack('scripts')
 </body>
+
 </html>

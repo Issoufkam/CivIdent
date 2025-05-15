@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Models\Utilisateur;
+use App\Models\User;
 use App\Models\Acte;
 
 class ActePolicy

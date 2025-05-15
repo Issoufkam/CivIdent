@@ -2,51 +2,61 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Document;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use Laravel\Sanctum\HasApiTokens; // Si tu utilises API
 
-class Utilisateur extends Authenticatable
+/**
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Document[] $documents
+ * @property \Illuminate\Database\Eloquent\Collection|\App\Models\Document[] $validatedDocuments
+ */
+
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
-
-    protected $guard_name = 'web'; // For Spatie
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'nom',
         'prenom',
         'email',
+        'telephone',
+        'role',
+        'commune_id',
         'password',
-        'role_id',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    public function role()
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    // Relations
+
+    public function commune()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Commune::class);
     }
 
-    public function citoyen()
+    public function documents()
     {
-        return $this->hasOne(Citoyen::class);
+        return $this->hasMany(Document::class);
     }
 
-    public function agent()
+    public function validatedDocuments()
     {
-        return $this->hasOne(Agent::class);
+        return $this->hasMany(Document::class, 'agent_id');
     }
 
-    // Remove the custom hasRole method to avoid conflicts with Spatie
+    public function activityLogs()
+    {
+        return $this->hasMany(ActivityLog::class);
+    }
+
+
 }

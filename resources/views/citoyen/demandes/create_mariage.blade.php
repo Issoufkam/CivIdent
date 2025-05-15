@@ -15,7 +15,7 @@
                 <img src="/img/signature.jpg" alt="Documents officiels" class="hero-img">
                     <h2 class="h4 mb-4">Service d'État Civil</h2>
                     <p class="mb-4">Obtenez votre acte de mariage en toute simplicité grâce à notre service en ligne.</p>
-                    
+
                     <div class="feature-item">
                         <div class="feature-icon">
                             <i class="fas fa-check"></i>

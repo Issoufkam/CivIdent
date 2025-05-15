@@ -15,14 +15,24 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'telephone' => ['required', 'string'],
-            'password' => ['required', 'string'],
+        $credentials = $request->only('telephone', 'password');
+
+        $request->validate([
+            'telephone' => 'required|string|min:10',
+            'password' => 'required|string',
         ]);
 
-        if (Auth::attempt(['telephone' => $credentials['telephone'], 'password' => $credentials['password']])) {
+        if (Auth::attempt(['telephone' => $request->telephone, 'password' => $request->password])) {
             $request->session()->regenerate();
-            return redirect()->intended(route('citoyen.dashboard'));
+
+            $role = Auth::user()->role ?? 'citoyen';
+
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'agent' => redirect()->route('agent.dashboard'),
+                'citoyen' => redirect()->route('citoyen.dashboard'),
+                default => redirect('/'),
+            };
         }
 
         return back()->withErrors([
@@ -33,9 +43,10 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('login');
     }
 }

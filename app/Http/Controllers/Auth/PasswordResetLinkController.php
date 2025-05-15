@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
@@ -57,7 +56,7 @@ class ForgotPasswordController extends Controller
             return back()->withErrors(['code' => 'Code invalide ou expiré.']);
         }
 
-        $user = Utilisateur::where('telephone', $telephone)->first();
+        $user = User::where('telephone', $telephone)->first();
         $user->password = Hash::make($request->password);
         $user->save();
 
