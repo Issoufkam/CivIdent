@@ -95,10 +95,7 @@
                                     <label class="form-label">Téléphone</label>
                                     <input type="tel" class="form-control" name="phone" required>
                                 </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Email</label>
-                                    <input type="email" class="form-control" name="email" required>
-                                </div>
+                            
                             </div>
                         </div>
 

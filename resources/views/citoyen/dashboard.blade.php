@@ -26,7 +26,7 @@
 
                 <a href="{{ route('citoyen.demandes.index') }}" class="btn btn-outline-success w-100">
                     <i class="fas fa-plus-circle me-2"></i>
-                    Nouvelle demande
+                    Suivre mes demandes
                 </a>
             </div>
         </div>
