@@ -2,51 +2,58 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use App\Traits\LogsActivity;
 
-class Utilisateur extends Authenticatable
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasRoles;
-
-    protected $guard_name = 'web'; // For Spatie
-
+    use Notifiable;
     protected $fillable = [
         'nom',
         'prenom',
+        'telephone',
         'email',
         'password',
-        'role_id',
+        'photo',
+        'adresse',
+        'commune_id',
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    public function role()
+    public function getPhotoUrlAttribute()
     {
-        return $this->belongsTo(Role::class);
+        return $this->photo
+            ? asset('storage/' . $this->photo)
+            : asset('images/default-profile.png');
     }
 
-    public function citoyen()
+
+
+    // Relation avec commune (si nécessaire)
+    public function commune()
     {
-        return $this->hasOne(Citoyen::class);
+        return $this->belongsTo(Commune::class);
     }
 
-    public function agent()
+    public function getActivityDescription(string $event): string
     {
-        return $this->hasOne(Agent::class);
+        return match($event) {
+            'created' => "Utilisateur créé: {$this->email}",
+            'updated' => "Utilisateur modifié: {$this->email}",
+            'deleted' => "Utilisateur supprimé: {$this->email}",
+            default => "Action inconnue sur l'utilisateur"
+        };
     }
 
-    // Remove the custom hasRole method to avoid conflicts with Spatie
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
+
 }

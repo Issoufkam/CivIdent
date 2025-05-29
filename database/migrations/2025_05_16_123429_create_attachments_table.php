@@ -11,15 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('paiements', function (Blueprint $table) {
+        Schema::create('attachments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('demande_id')->constrained('demandes');
-            $table->decimal('montant', 10, 2);
-            $table->timestamp('date_paiement')->useCurrent();
-            $table->string('mode_paiement')->nullable(); // carte, mobile money
+            $table->string('path'); // Ex: "attachments/acte-123.pdf"
+            $table->string('mime_type'); // "application/pdf", "image/jpeg", etc.
+            $table->foreignId('document_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
-        
     }
 
     /**
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('paiements');
+        Schema::dropIfExists('attachments');
     }
 };

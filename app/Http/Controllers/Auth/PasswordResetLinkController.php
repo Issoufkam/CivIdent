@@ -57,7 +57,7 @@ class ForgotPasswordController extends Controller
             return back()->withErrors(['code' => 'Code invalide ou expiré.']);
         }
 
-        $user = Utilisateur::where('telephone', $telephone)->first();
+        $user = User::where('telephone', $telephone)->first();
         $user->password = Hash::make($request->password);
         $user->save();
 

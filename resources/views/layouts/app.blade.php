@@ -57,15 +57,16 @@
             </li>
         @endguest
           @auth
-              @php
-                $role = Auth::user()->getRoleNames()->first();
-                $dashboardRoute = match($role) {
-                    'admin' => route('admin.dashboard'),
-                    'agent' => route('agent.dashboard'),
-                    'citoyen' => route('citoyen.dashboard'),
-                    default => '#'
-                };
-              @endphp
+                @php
+                    $role = Auth::user()->role ?? null;
+                    $dashboardRoute = match($role) {
+                        'admin' => route('admin.dashboard'),
+                        'agent' => route('agent.dashboard'),
+                        'citoyen' => route('citoyen.dashboard'),
+                        default => 'citoyen.dashboard'
+                    };
+                @endphp
+
 
               <li class="nav-item ms-lg-3">
                   <a class="nav-link" href="{{ $dashboardRoute }}">

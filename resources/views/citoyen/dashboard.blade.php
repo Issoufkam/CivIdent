@@ -7,21 +7,32 @@
         <div class="col-md-4">
             <div class="card p-4">
                 <h4 class="mb-2">
-                @auth
-                    {{ $greeting }}, {{ Auth::user()->prenom }} {{ Auth::user()->nom }} !
-                @endauth
+                    @auth
+                        {{ $greeting }}, {{ Auth::user()->prenom }} {{ Auth::user()->nom }} !
+                    @endauth
                 </h4>
                 <p class="text-muted mb-4">Voici votre tableau de bord</p>
 
                 <div class="mb-4">
-                    <h5 class="mb-3">Demandes en cours</h5>
-                    <div class="p-3 bg-light rounded">
-                        <h6>Demande d'acte de naissance</h6>
-                        <p class="mb-2">
-                            <span class="badge bg-warning">En cours</span>
-                        </p>
-                        <small class="text-muted">10 Avril 2025</small>
-                    </div>
+                    <h5 class="mb-3">Dernière demande</h5>
+
+                    @if($latestDocument)
+                        <div class="p-3 bg-light rounded">
+                            <h6>{{ $latestDocument->type->label() }}</h6>
+                            <p class="mb-2">
+                                <span class="badge
+                                    @if($latestDocument->status === \App\Enums\DocumentStatus::EN_ATTENTE) bg-warning
+                                    @elseif($latestDocument->status === \App\Enums\DocumentStatus::APPROUVEE) bg-success
+                                    @elseif($latestDocument->status === \App\Enums\DocumentStatus::REJETEE) bg-danger
+                                    @else bg-secondary @endif">
+                                    {{ $latestDocument->status->label() }}
+                                </span>
+                            </p>
+                            <small class="text-muted">{{ $latestDocument->created_at->format('d F Y') }}</small>
+                        </div>
+                    @else
+                        <p class="text-muted">Aucune demande pour le moment.</p>
+                    @endif
                 </div>
 
                 <a href="{{ route('citoyen.demandes.index') }}" class="btn btn-outline-success w-100">
@@ -43,44 +54,208 @@
                         <a class="nav-link" data-bs-toggle="tab" href="#mariage">Acte de mariage</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#deces">Acte de décès</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="tab" href="#certificat-vie">Certificat de vie</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#celibat">Certificat de non revenu</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#certificat-revenu">Certificat de non revenu</a>
                     </li>
                 </ul>
 
                 <div class="tab-content">
-                    @foreach ($demandes as $type => $demandesType)
-                        <div class="tab-pane fade{{ $loop->first ? ' show active' : '' }}" id="{{ Str::slug($type) }}">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                    <!-- Onglet Naissance -->
+                    <div class="tab-pane fade show active" id="naissance">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Statut</th>
+                                        <th>Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($demandes['naissance'] ?? [] as $demande)
                                         <tr>
-                                            <th>Type</th>
-                                            <th>Statut</th>
-                                            <th>Date</th>
-                                            <th>Action</th>
+                                            <td>{{ $demande->type->label() }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $demande->status->color() }}">
+                                                    {{ $demande->status->label() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $demande->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success mb-1">
+                                                    <i class="fas fa-eye me-1"></i> Voir
+                                                </a>
+                                                @if ($demande->status === \App\Enums\DocumentStatus::APPROUVEE && !$demande->is_paid)
+                                                    <form action="{{ route('citoyen.paiement.form', $demande) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-credit-card me-1"></i> Payer
+                                                        </button>
+                                                    </form>
+                                                @elseif ($demande->is_paid)
+                                                    <span class="badge bg-success">Payé</span>
+                                                @endif
+                                            </td>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($demandesType as $demande)
-                                            <tr>
-                                                <td>{{ $demande->acte->type->label() }}</td>
-                                                <td><span class="badge bg-{{ $demande->statut->color() }}">{{ $demande->statut->label() }}</span></td>
-                                                <td>{{ $demande->created_at->format('d M Y') }}</td>
-                                                <td>
-                                                    <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success">
-                                                        <i class="fas fa-eye me-1"></i> Voir
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                    @endforeach
+                    </div>
+
+                    <!-- Onglet Mariage -->
+                    <div class="tab-pane fade" id="mariage">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <!-- Même structure que pour naissance -->
+                                <tbody>
+                                    @foreach ($demandes['mariage'] ?? [] as $demande)
+                                        <tr>
+                                            <td>{{ $demande->type->label() }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $demande->status->color() }}">
+                                                    {{ $demande->status->label() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $demande->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success mb-1">
+                                                    <i class="fas fa-eye me-1"></i> Voir
+                                                </a>
+                                                @if ($demande->status === \App\Enums\DocumentStatus::APPROUVEE && !$demande->is_paid)
+                                                    <form action="{{ route('citoyen.paiement.form', $demande) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-credit-card me-1"></i> Payer
+                                                        </button>
+                                                    </form>
+                                                @elseif ($demande->is_paid)
+                                                    <span class="badge bg-success">Payé</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Décès -->
+                    <div class="tab-pane fade" id="deces">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <!-- Même structure que pour naissance -->
+                                <tbody>
+                                    @foreach ($demandes['deces'] ?? [] as $demande)
+                                        <tr>
+                                            <td>{{ $demande->type->label() }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $demande->status->color() }}">
+                                                    {{ $demande->status->label() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $demande->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success mb-1">
+                                                    <i class="fas fa-eye me-1"></i> Voir
+                                                </a>
+                                                @if ($demande->status === \App\Enums\DocumentStatus::APPROUVEE && !$demande->is_paid)
+                                                    <form action="{{ route('citoyen.paiement.form', $demande) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-credit-card me-1"></i> Payer
+                                                        </button>
+                                                    </form>
+                                                @elseif ($demande->is_paid)
+                                                    <span class="badge bg-success">Payé</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Certificat de vie -->
+                    <div class="tab-pane fade" id="certificat-vie">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <!-- Même structure que pour naissance -->
+                                <tbody>
+                                    @foreach ($demandes['vie'] ?? [] as $demande)
+                                        <tr>
+                                            <td>{{ $demande->type->label() }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $demande->status->color() }}">
+                                                    {{ $demande->status->label() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $demande->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success mb-1">
+                                                    <i class="fas fa-eye me-1"></i> Voir
+                                                </a>
+                                                @if ($demande->status === \App\Enums\DocumentStatus::APPROUVEE && !$demande->is_paid)
+                                                    <form action="{{ route('citoyen.paiement.form', $demande) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-credit-card me-1"></i> Payer
+                                                        </button>
+                                                    </form>
+                                                @elseif ($demande->is_paid)
+                                                    <span class="badge bg-success">Payé</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Onglet Certificat de non revenu -->
+                    <div class="tab-pane fade" id="certificat-revenu">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <!-- Même structure que pour naissance -->
+                                <tbody>
+                                    @foreach ($demandes['certificat-revenu'] ?? [] as $demande)
+                                        <tr>
+                                            <td>{{ $demande->type->label() }}</td>
+                                            <td>
+                                                <span class="badge bg-{{ $demande->status->color() }}">
+                                                    {{ $demande->status->label() }}
+                                                </span>
+                                            </td>
+                                            <td>{{ $demande->created_at->format('d M Y') }}</td>
+                                            <td>
+                                                <a href="{{ route('citoyen.demandes.show', $demande) }}" class="btn btn-sm btn-outline-success mb-1">
+                                                    <i class="fas fa-eye me-1"></i> Voir
+                                                </a>
+                                                @if ($demande->status === \App\Enums\DocumentStatus::APPROUVEE && !$demande->is_paid)
+                                                    <form action="{{ route('citoyen.paiement.form', $demande) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-credit-card me-1"></i> Payer
+                                                        </button>
+                                                    </form>
+                                                @elseif ($demande->is_paid)
+                                                    <span class="badge bg-success">Payé</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -101,7 +276,7 @@
                                     <i class="fas fa-star"></i>
                                 @endfor
                             </div>
-                            <a href="{{ route('citoyen.demande.' . Str::slug($type)) }}" class="btn btn-outline-success w-100">Demander</a>
+                            <a href="{{ route('citoyen.demandes.' . Str::slug($type)) }}" class="btn btn-outline-success w-100">Demander</a>
                         </div>
                     </div>
                 </div>
@@ -118,7 +293,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.deces') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.deces') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -133,7 +308,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.naissance') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.naissance') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -148,7 +323,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.mariage') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.mariage') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -169,7 +344,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.vie') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.vie') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -184,7 +359,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.entretien') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.entretien') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>
@@ -199,7 +374,7 @@
                                 <i class="fas fa-star"></i>
                             @endfor
                         </div>
-                        <a href="{{ route('citoyen.demande.revenu') }}" class="btn btn-outline-success w-100">Demander</a>
+                        <a href="{{ route('citoyen.demandes.revenu') }}" class="btn btn-outline-success w-100">Demander</a>
                     </div>
                 </div>
             </div>

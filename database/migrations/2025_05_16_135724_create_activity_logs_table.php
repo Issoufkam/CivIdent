@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('type_actes', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('libelle')->unique(); // naissance, mariage, décès
+            $table->text('description');
+            $table->morphs('subject');
+            $table->foreignId('causer_id')->nullable()->constrained('users');
             $table->timestamps();
         });
-        
+
     }
 
     /**
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('type_actes');
+        Schema::dropIfExists('activities');
     }
 };

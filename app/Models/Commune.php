@@ -3,18 +3,21 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Commune extends Model
 {
-    protected $fillable = ['nom_commune', 'region', 'code_postal'];
+    protected $fillable = ['name', 'code', 'region'];
 
-    public function agents()
+    // Demandes de la commune
+    public function documents(): HasMany
     {
-        return $this->hasMany(Agent::class);
+        return $this->hasMany(Document::class);
     }
 
-    public function actes()
+    // Utilisateurs associés (agents)
+    public function users(): HasMany
     {
-        return $this->hasMany(Acte::class);
+        return $this->hasMany(User::class);
     }
 }

@@ -3,85 +3,67 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Utilisateur;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Import the Log facade
-use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
     /**
-     * Show the registration form.
-     *
-     * @return \Illuminate\View\View
+     * Affiche le formulaire d'inscription.
      */
     public function create()
     {
-        return view('auth.register'); // Ensure this view exists
+        return view('auth.register');
     }
 
     /**
-     * Handle user registration.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Enregistre un nouvel utilisateur.
      */
     public function store(Request $request)
     {
-        // Validate the request data
         $request->validate([
             'nom' => 'required|string|max:25',
             'prenom' => 'required|string|max:25',
-            'telephone' => 'required|string|max:15|min:10|unique:utilisateurs',
-            'email' => 'required|string|email|max:40|unique:utilisateurs',
-            'password' => ['required', 'confirmed'], 
+            'telephone' => 'required|string|max:15|min:10|unique:users,telephone',
+            'email' => 'required|string|email|max:40|unique:users,email',
+            'password' => ['required', 'confirmed'],
             'adresse' => 'nullable|string|max:255',
+            'date_naissance' => 'nullable|date',
+            'lieu_naissance' => 'nullable|string|max:100',
         ]);
 
-        // Ensure the "citoyen" role exists
-        if (!Role::where('name', 'citoyen')->exists()) {
-            Role::create(['name' => 'citoyen']);
-        }
-
-        // Create the user
-        $utilisateur = Utilisateur::create([
+        $utilisateur = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'telephone' => $request->telephone,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'adresse' => $request->adresse,
         ]);
 
-        // Create a related citoyen record
-        $utilisateur->citoyen()->create([
-            'adresse' => $request->adresse ?? 'non renseignée',
-            'date_naissance' => $request->date_naissance ?? null,
-            'lieu_naissance' => $request->lieu_naissance ?? null,
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-        ]);
-
-        // Assign the "citoyen" role
-        $utilisateur->assignRole('citoyen');
-
-        // Log role assignment
-        if ($utilisateur->hasRole('citoyen')) {
-            Log::info('Rôle citoyen correctement assigné à l’utilisateur : ' . $utilisateur->id);
-        } else {
-            Log::error('Échec de l’assignation du rôle citoyen.');
-        }
-
-        // Trigger the registered event
+        // Événement Laravel
         event(new Registered($utilisateur));
 
-        // Log in the user
+        // Connexion automatique
         Auth::login($utilisateur);
 
-        // Redirect to the citoyen dashboard
-        return redirect()->route('citoyen.dashboard');
+        // Redirection selon le rôle
+        return $this->redirectByRole($utilisateur);
+    }
+
+    /**
+     * Redirige l'utilisateur selon son rôle.
+     */
+    protected function redirectByRole(User $user)
+    {
+        return match ($user->role) {
+            'citoyen' => redirect()->route('citoyen.dashboard'),
+            'agent' => redirect()->route('agent.dashboard'),
+            'admin' => redirect()->route('admin.dashboard'),
+            default => redirect('/'),
+        };
     }
 }

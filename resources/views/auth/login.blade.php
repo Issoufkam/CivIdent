@@ -41,7 +41,7 @@
                     </p>
 
                     <p class="text-center">
-                        <a class="text-success" href="{{ route('password.phone.request') }}">Mot de passe oublié ?</a>
+                        <a class="text-success" href="{{ route('password.request') }}">Mot de passe oublié ?</a>
                     </p>
                 </form>
             </div>

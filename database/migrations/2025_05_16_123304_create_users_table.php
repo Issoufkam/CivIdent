@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('telephone')->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->enum('role', ['citoyen', 'agent', 'admin'])->default('citoyen');
+            $table->foreignId('commune_id')->nullable()->constrained('communes');
+            $table->string('photo')->nullable();
+            $table->string('adresse')->nullable();
             $table->string('password');
-            //$table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('communes', function (Blueprint $table) {
-            $table->id();
-            $table->string('nom_commune');
-            $table->string('region')->nullable();
-            $table->string('code_postal')->nullable();
-            $table->timestamps();
+        Schema::table('communes', function (Blueprint $table) {
+            //
         });
-        
     }
 
     /**
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('communes');
+        Schema::table('communes', function (Blueprint $table) {
+            //
+        });
     }
 };

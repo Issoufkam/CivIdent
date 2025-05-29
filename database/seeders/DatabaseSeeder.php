@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Database\Seeders\RoleSeeder; // Assure-toi que ce fichier existe et est correctement importé
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,7 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Appel du seeder de rôles
-        $this->call(RoleSeeder::class); 
+        // \App\Models\User::factory(10)->create();
+
+        // \App\Models\User::factory()->create([
+        //     'name' => 'Test User',
+        //     'email' => 'test@example.com',
+        // ]);
+
+        $this->call([
+            DocumentSeeder::class,
+        ]);
+
     }
 }
