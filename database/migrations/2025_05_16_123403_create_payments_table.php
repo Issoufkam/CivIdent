@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
-            $table->decimal('amount', 10, 2);
-            $table->string('reference')->unique(); // Ex: "PAY-2023-ABJ-001"
-            $table->enum('method', ['mobile_money', 'credit_card', 'bank_transfer']);
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('document_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
-        });
+        $table->id();
+        $table->foreignId('document_id')->constrained()->onDelete('cascade');
+        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->decimal('amount', 10, 2);
+        $table->string('payment_method');
+        $table->string('transaction_id')->unique();
+        $table->string('status')->default('pending');
+        $table->timestamps();
+    });
     }
 
     /**

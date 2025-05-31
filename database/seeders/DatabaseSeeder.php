@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             DocumentSeeder::class,
+            CommuneSeeder::class,
+            // UserSeeder::class,
         ]);
 
     }

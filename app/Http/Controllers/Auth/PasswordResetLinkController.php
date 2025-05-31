@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Log;
 
-class ForgotPasswordController extends Controller
+class PasswordResetLinkController extends Controller
 {
     public function showPhoneForm()
     {

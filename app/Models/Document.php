@@ -12,19 +12,22 @@ class Document extends Model
 {
     protected $fillable = [
         'type',
-        'status',
-        'registry_number',
-        'registry_page',
-        'registry_volume',
-        'metadata',
-        'justificatif_path',
-        'user_id',
-        'commune_id',
-        'agent_id',
-        'traitement_date',
-        'is_duplicata',
-        'original_document_id',
-        'pdf_path',
+    'user_id',
+    'commune_id',
+    'agent_id',
+    'registry_number',
+    'registry_page',
+    'justificatif_path',
+    'pdf_path',
+    'metadata',
+    'status',
+    'is_paid',
+    'payment_method',
+    'payment_date',
+    'payment_amount',
+    'is_downloaded',
+    'is_duplicata',
+    'original_document_id'
     ];
 
     protected $casts = [
