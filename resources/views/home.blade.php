@@ -288,7 +288,7 @@
                     <div class="post-content-entry">
                         <h3><a href="">Certificat de vie</a></h3>
                         <div class="meta">
-                            <span>Notes <a href="#"></a></span>
+                            <span>Notes <a href="{{ route('citoyen.demandes.vie') }}"></a></span>
                             <span>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
@@ -305,7 +305,7 @@
                     <div class="post-content-entry">
                         <h3><a href="">Certification d'entretien</a></h3>
                         <div class="meta">
-                            <span>Notes <a href="#"></a></span>
+                            <span>Notes <a href="{{ route('citoyen.demandes.entretien') }}"></a></span>
                             <span>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>
@@ -324,9 +324,9 @@
                 <div class="post-entry">
                     <a href="{{ route('login') }}" class="post-thumbnail"><img src="img/doc 6.jpeg" alt="Image" class="img-fluid"></a>
                     <div class="post-content-entry">
-                        <h3><a href="">Certification de non revenu </a></h3>
+                        <h3><a href="{{ route('citoyen.demandes.revenu') }}">Certification de non revenu </a></h3>
                         <div class="meta">
-                            <span>Notes <a href="#"></a></span>
+                            <span>Notes <a href=""></a></span>
                             <span>
                                 <i class="fa fa-star text-warning"></i>
                                 <i class="fa fa-star text-warning"></i>

@@ -27,8 +27,8 @@
                             </li>
                             {{-- Vérifiez que $payment->payment_date n'est pas null avant de formater --}}
                             <li><strong>Date du paiement:</strong>
-                                @if ($payment->created_at) {{-- Utilisation de created_at du modèle Payment --}}
-                                    {{ $payment->created_at->format('d/m/Y H:i') }}
+                                @if ($payment->payment_date)
+                                    {{ $payment->payment_date->format('d/m/Y H:i') }}
                                 @else
                                     Non spécifiée
                                 @endif
