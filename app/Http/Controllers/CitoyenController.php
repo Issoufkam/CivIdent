@@ -883,7 +883,7 @@ class CitoyenController extends Controller
                 'metadata.nom_enfant' => 'required|string|max:255',
                 'metadata.prenom_enfant' => 'required|string|max:255',
                 'metadata.date_naissance' => 'required|date',
-                'metadata.sexe' => 'required|string|in:Masculin,Féminin',
+                'metadata.sexe' => 'required|string',
                 'metadata.lieu_naissance' => 'required|string|max:255',
                 'metadata.nom_pere' => 'required|string|max:255',
                 'metadata.nationalite_pere' => 'required|string|max:255',
