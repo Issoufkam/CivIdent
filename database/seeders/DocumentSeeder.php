@@ -11,9 +11,17 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Faker\Factory as Faker; // 👈 Ajout ici
 
 class DocumentSeeder extends Seeder
 {
+    protected $faker; // 👈 Ajouter une propriété
+
+    public function __construct()
+    {
+        $this->faker = Faker::create(); // 👈 Instanciation ici
+    }
+
     public function run(): void
     {
         $communes = Commune::all();
@@ -49,21 +57,21 @@ class DocumentSeeder extends Seeder
     {
         return match ($type) {
             'naissance' => [
-                'nom' => fake()->lastName(),
-                'prenom' => fake()->firstName(),
-                'date_acte' => fake()->date('Y-m-d'),
-                'nom_pere' => fake()->name('male'),
-                'nom_mere' => fake()->name('female')
+                'nom' => $this->faker->lastName(),
+                'prenom' => $this->faker->firstName(),
+                'date_acte' => $this->faker->date('Y-m-d'),
+                'nom_pere' => $this->faker->name('male'),
+                'nom_mere' => $this->faker->name('female')
             ],
             'deces' => [
-                'nom' => fake()->lastName(),
-                'prenom' => fake()->firstName(),
-                'date_acte' => fake()->date('Y-m-d'),
+                'nom' => $this->faker->lastName(),
+                'prenom' => $this->faker->firstName(),
+                'date_acte' => $this->faker->date('Y-m-d'),
                 'cause' => 'Maladie naturelle'
             ],
             default => [
                 'objet' => 'Demande de document de type ' . $type,
-                'date_acte' => fake()->date('Y-m-d')
+                'date_acte' => $this->faker->date('Y-m-d')
             ]
         };
     }
