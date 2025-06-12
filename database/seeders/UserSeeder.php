@@ -17,11 +17,11 @@ class UserSeeder extends Seeder
         // Création d'un utilisateur administrateur
         User::create([
             'nom' => 'Admin',
-            'prenom' => 'Admin',
+            'prenom' => 'Groupe 14',
             'telephone' => '0123456789',
-            'email' => 'admin@example.com',
+            'email' => 'groupe14@uvci.ci',
             'password' => Hash::make('password'),
-            'role' => UserRole::ADMIN, 
+            'role' => UserRole::ADMIN,
         ]);
 
         // Exemple : Création d'un agent
@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'nom' => 'Agent',
             'prenom' => 'Jean',
             'telephone' => '0789456123',
-            'email' => 'agent@example.com',
+            'email' => 'groupe14@uvci.ci',
             'password' => Hash::make('agent123'),
             'role' => UserRole::AGENT,
         ]);
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
             'nom' => 'Citoyen',
             'prenom' => 'Marie',
             'telephone' => '0598123478',
-            'email' => 'citoyen@example.com',
+            'email' => 'groupe14@uvci.ci',
             'password' => Hash::make('citoyen123'),
             'role' => UserRole::CITOYEN,
         ]);
