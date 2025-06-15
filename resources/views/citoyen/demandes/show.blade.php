@@ -159,10 +159,8 @@
                         <div class="col-md-6 mb-4">
                             <div class="detail-section">
                                 @php
-                                    // Correction : Accédez directement au tableau imbriqué 'metadata'
-                                    // dd($demande->metadata); // Cette ligne de débogage a montré le problème.
-
-                                    $metadata = $demande->metadata['metadata'] ?? [];
+                                    // CORRECTION: Accédez directement au tableau 'metadata' car il n'est pas imbriqué sous une autre clé 'metadata'.
+                                    $metadata = $demande->metadata ?? []; // Utilisez $demande->metadata directement
 
                                     // Assurez-vous toujours que $metadata est un tableau pour éviter des erreurs avec foreach
                                     $metadata = is_array($metadata) ? $metadata : [];
@@ -209,8 +207,6 @@
                                             $fields = [
                                                 'nom_defunt' => "Nom du défunt",
                                                 'prenom_defunt' => "Prénom du défunt",
-                                                'date_naissance_defunt' => "Date de naissance du défunt",
-                                                'lieu_naissance_defunt' => "Lieu de naissance du défunt",
                                                 'date_deces' => "Date du décès",
                                                 'lieu_deces' => "Lieu du décès",
                                                 'nom_declarant' => "Nom du déclarant",
@@ -218,10 +214,49 @@
                                                 'lien_parente_declarant' => "Lien de parenté avec le défunt"
                                             ];
                                             break;
+                                        case 'certificat-vie':
+                                            $icon = 'bi-person-badge';
+                                            $fields = [
+                                                'nom_demandeur' => "Nom du demandeur",
+                                                'prenom_demandeur' => "Prénom du demandeur",
+                                                'date_naissance_demandeur' => "Date de naissance du demandeur",
+                                                'lieu_naissance_demandeur' => "Lieu de naissance du demandeur",
+                                            ];
+                                            break;
+                                        case 'certificat-entretien':
+                                            $icon = 'bi-people';
+                                            $fields = [
+                                                'nom_demandeur' => "Nom du demandeur",
+                                                'prenom_demandeur' => "Prénom du demandeur",
+                                                'relation' => "Relation avec la personne entretenue",
+                                            ];
+                                            break;
+                                        case 'certificat-revenu':
+                                            $icon = 'bi-cash';
+                                            $fields = [
+                                                'nom_demandeur' => "Nom du demandeur",
+                                                'prenom_demandeur' => "Prénom du demandeur",
+                                                'montant_revenu' => "Montant du revenu",
+                                                'source_revenu' => "Source du revenu",
+                                            ];
+                                            break;
+                                        case 'certificat-divorce':
+                                            $icon = 'bi-file-earmark-break';
+                                            $fields = [
+                                                'nom_epoux' => "Nom de l'époux",
+                                                'prenom_epoux' => "Prénom de l'époux",
+                                                'nom_epouse' => "Nom de l'épouse",
+                                                'prenom_epouse' => "Prénom de l'épouse",
+                                                'date_divorce' => "Date du divorce",
+                                            ];
+                                            break;
                                         default:
                                             // Pour les autres types, affichez toutes les clés de métadonnées trouvées
                                             foreach ($metadata as $key => $value) {
-                                                $fields[$key] = ucfirst(str_replace('_', ' ', $key));
+                                                // Exclure 'copies' de l'affichage détaillé des métadonnées
+                                                if ($key !== 'copies') {
+                                                    $fields[$key] = ucfirst(str_replace('_', ' ', $key));
+                                                }
                                             }
                                             break;
                                     }
@@ -247,6 +282,16 @@
                                     </div>
                                 @else
                                     <div class="alert alert-info mt-3">Aucune information spécifique disponible pour ce type de document.</div>
+                                @endif
+
+                                {{-- Affichage du nombre de copies, car il est dans les métadonnées pour tous les types --}}
+                                @if (isset($demande->metadata['copies']))
+                                    <div class="row mt-3">
+                                        <div class="col-sm-6 mb-2">
+                                            <p class="mb-1 text-muted">Nombre de copies</p>
+                                            <p class="fw-bold">{{ $demande->metadata['copies'] }}</p>
+                                        </div>
+                                    </div>
                                 @endif
                             </div>
                         </div>
@@ -291,11 +336,11 @@
                                                         @if($isImage)
                                                             <div class="mt-2 mb-3">
                                                                 <img src="{{ $filePath }}"
-                                                                    class="img-thumbnail"
-                                                                    style="max-height: 150px; cursor: pointer"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#imagePreviewModal"
-                                                                    onclick="document.getElementById('previewImage').src = this.src; document.getElementById('downloadPreview').href = this.src;">
+                                                                     class="img-thumbnail"
+                                                                     style="max-height: 150px; cursor: pointer"
+                                                                     data-bs-toggle="modal"
+                                                                     data-bs-target="#imagePreviewModal"
+                                                                     onclick="document.getElementById('previewImage').src = this.src; document.getElementById('downloadPreview').href = this.src;">
                                                             </div>
                                                         @elseif($isPdf)
                                                             <div class="mt-2 mb-3">
@@ -369,11 +414,11 @@
                                                         @if($isAttachmentImage)
                                                             <div class="mt-2 mb-3">
                                                                 <img src="{{ $attachmentPath }}"
-                                                                    class="img-thumbnail"
-                                                                    style="max-height: 150px; cursor: pointer"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#imagePreviewModal"
-                                                                    onclick="document.getElementById('previewImage').src = this.src; document.getElementById('downloadPreview').href = this.src;">
+                                                                     class="img-thumbnail"
+                                                                     style="max-height: 150px; cursor: pointer"
+                                                                     data-bs-toggle="modal"
+                                                                     data-bs-target="#imagePreviewModal"
+                                                                     onclick="document.getElementById('previewImage').src = this.src; document.getElementById('downloadPreview').href = this.src;">
                                                             </div>
                                                         @elseif($isAttachmentPdf)
                                                             <div class="mt-2 mb-3">
@@ -427,7 +472,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title">Aperçu du document</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
                                 </div>
                                 <div class="modal-body text-center">
                                     <img id="previewImage" src="" class="img-fluid" alt="Aperçu du document">
@@ -477,11 +522,22 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Update download link in the modal
-        $('#imagePreviewModal').on('show.bs.modal', function (event) {
-            const imgSrc = document.getElementById('previewImage').src;
-            document.getElementById('downloadPreview').href = imgSrc;
-        });
+        // Obtenez une référence à l'élément modal
+        const imagePreviewModalElement = document.getElementById('imagePreviewModal');
+
+        // Assurez-vous que l'élément modal existe avant d'ajouter l'écouteur
+        if (imagePreviewModalElement) {
+            // Utilisez l'écouteur d'événements natif pour l'événement show.bs.modal de Bootstrap
+            imagePreviewModalElement.addEventListener('show.bs.modal', function (event) {
+                const previewImage = document.getElementById('previewImage');
+                const downloadPreview = document.getElementById('downloadPreview');
+
+                if (previewImage && downloadPreview) {
+                    const imgSrc = previewImage.src; // L'image a déjà été définie par le onclick sur l'aperçu
+                    downloadPreview.href = imgSrc;
+                }
+            });
+        }
     });
 </script>
 @endpush

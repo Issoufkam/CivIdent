@@ -125,10 +125,16 @@
                         <input type="text" class="form-control @error('registry_number') is-invalid @enderror" name="registry_number" id="registry_number" placeholder="Numéro du registre" value="{{ old('registry_number') }}">
                         @error('registry_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label required" for="idFront">Pièce d'identité (recto)</label>
-                        <input type="file" class="form-control @error('idFront') is-invalid @enderror" name="idFront" id="idFront">
-                        @error('idFront')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <div class="col-md-6">
+                        <label class="form-label required" for="copies">Nombre de Copies</label>
+                        <select class="form-select @error('metadata.copies') is-invalid @enderror" id="copies" name="metadata[copies]" required>
+                            <option value="1" {{ old('metadata.copies') == '1' ? 'selected' : '' }}>1</option>
+                            <option value="2" {{ old('metadata.copies') == '2' ? 'selected' : '' }}>2</option>
+                            <option value="3" {{ old('metadata.copies') == '3' ? 'selected' : '' }}>3</option>
+                            <option value="4" {{ old('metadata.copies') == '4' ? 'selected' : '' }}>4</option>
+                            <option value="5" {{ old('metadata.copies') == '5' ? 'selected' : '' }}>5</option>
+                        </select>
+                        @error('metadata.copies')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                 </div>
             </div>

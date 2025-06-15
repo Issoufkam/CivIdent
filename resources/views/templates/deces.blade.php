@@ -164,7 +164,7 @@
       <button class="btn btn-outline-primary" onclick="window.print()">
         Imprimer
       </button>
-      <a href="{{ route('agent.documents.show', $document->id) }}" class="btn btn-secondary">
+      <a href="{{ route('citoyen.paiements.confirmation', $document->id) }}" class="btn btn-secondary">
         Retour
       </a>
     </div>

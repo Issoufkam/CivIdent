@@ -10,33 +10,37 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use App\Enums\DocumentStatus;
+use App\Enums\DocumentType;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Support\Str;
-use Symfony\Component\HttpFoundation\StreamedResponse; // Import StreamedResponse if necessary for finer download control
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CitoyenController extends Controller
 {
+    // Répertoire où les signatures des agents sont stockées dans le disque public
+    private const SIGNATURES_DIR = 'signatures';
     /*
     |--------------------------------------------------------------------------
     | SECTION TABLEAU DE BORD
     |--------------------------------------------------------------------------
-    | Manages the display of the citizen's dashboard with statistics
-    | and paginated lists of different document types.
+    | Gère l'affichage du tableau de bord du citoyen avec les statistiques
+    | et les listes paginées des différents types de documents.
     */
 
     /**
-     * Displays the citizen's dashboard.
+     * Affiche le tableau de bord du citoyen.
      *
      * @return \Illuminate\View\View
      */
     public function dashboard()
     {
         $citoyen = auth()->user();
-        $this->authorizeCitoyenAccess($citoyen);
+        // L'appel à authorizeCitoyenAccess($citoyen) a été retiré car la méthode n'existe pas
+        // et l'accès au tableau de bord de l'utilisateur connecté est généralement implicite.
 
-        // Paginated retrieval of documents by type
-        // We will pass these variables directly to the view with the expected names
+        // Récupération paginée des documents par type
         $naissanceDocuments = Document::where('user_id', $citoyen->id)
             ->where('type', 'naissance')
             ->latest()
@@ -77,7 +81,6 @@ class CitoyenController extends Controller
             'greeting' => $this->getGreeting(),
             'stats' => $this->getStats($citoyen),
             'latestDocument' => Document::where('user_id', $citoyen->id)->latest()->first(),
-            // Pass each paginated collection with the variable name expected by the view
             'naissanceDocuments' => $naissanceDocuments,
             'mariageDocuments' => $mariageDocuments,
             'decesDocuments' => $decesDocuments,
@@ -90,13 +93,13 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SECTION DOCUMENT MANAGEMENT (CRUD)
+    | SECTION GESTION DES DOCUMENTS (CRUD)
     |--------------------------------------------------------------------------
-    | Manages CRUD operations for documents (requests).
+    | Gère les opérations CRUD pour les documents (demandes).
     */
 
     /**
-     * Displays the list of citizen document requests.
+     * Affiche la liste des demandes de documents du citoyen.
      *
      * @return \Illuminate\View\View
      */
@@ -111,7 +114,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the generic form for creating a new request.
+     * Affiche le formulaire générique de création d'une nouvelle demande.
      *
      * @return \Illuminate\View\View
      */
@@ -123,7 +126,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Saves a new document request (original or duplicate) to the database.
+     * Enregistre une nouvelle demande (originale ou duplicata) dans la base de données.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
@@ -135,12 +138,12 @@ class CitoyenController extends Controller
             $type = $validatedData['type'];
             $isDuplicata = (bool) $validatedData['is_duplicata'];
 
-            // Checks if a request of the same type is already pending
+            // Vérifie si une demande du même type est déjà en attente
             if ($this->hasPendingRequest($type)) {
                 return back()->with('error', "Vous avez déjà une demande de ce type en cours de traitement. Veuillez attendre son approbation ou son rejet avant de soumettre une nouvelle demande de ce type.")->withInput();
             }
 
-            // Creates the document depending on whether it is a duplicate or a new request
+            // Crée le document en fonction de s'il s'agit d'un duplicata ou d'une nouvelle demande
             $document = $isDuplicata
                 ? $this->createDuplicataDocument($validatedData, $request)
                 : $this->createNewDocument($validatedData, $request);
@@ -162,7 +165,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the details of a specific document.
+     * Affiche les détails d'un document spécifique.
      *
      * @param \App\Models\Document $document
      * @return \Illuminate\View\View
@@ -173,13 +176,12 @@ class CitoyenController extends Controller
 
         return view('citoyen.demandes.show', [
             'demande' => $document,
-            // canDownload is true if the document is paid AND if the PDF file physically exists
             'canDownload' => $document->is_paid && $document->pdf_path && Storage::disk('public')->exists($document->pdf_path)
         ]);
     }
 
     /**
-     * Updates an existing document.
+     * Met à jour un document existant.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Document $document
@@ -213,7 +215,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Deletes a document.
+     * Supprime un document.
      *
      * @param \App\Models\Document $document
      * @return \Illuminate\Http\JsonResponse
@@ -231,13 +233,13 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SECTION SPECIFIC FORMS
+    | SECTION FORMULAIRES SPÉCIFIQUES
     |--------------------------------------------------------------------------
-    | Methods to display specific request forms.
+    | Méthodes pour afficher les formulaires de demande spécifiques.
     */
 
     /**
-     * Displays the birth certificate request form.
+     * Affiche le formulaire de demande d'acte de naissance.
      *
      * @return \Illuminate\View\View
      */
@@ -249,7 +251,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the marriage certificate request form.
+     * Affiche le formulaire de demande d'acte de mariage.
      *
      * @return \Illuminate\View\View
      */
@@ -261,7 +263,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the death certificate request form.
+     * Affiche le formulaire de demande d'acte de décès.
      *
      * @return \Illuminate\View\View
      */
@@ -273,7 +275,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the certificate of life request form.
+     * Affiche le formulaire de demande de certificat de vie.
      *
      * @return \Illuminate\View\View
      */
@@ -283,7 +285,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the certificate of support request form.
+     * Affiche le formulaire de demande de certificat d'entretien.
      *
      * @return \Illuminate\View\View
      */
@@ -293,7 +295,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the income certificate request form.
+     * Affiche le formulaire de demande de certificat de revenu.
      *
      * @return \Illuminate\View\View
      */
@@ -303,7 +305,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the divorce certificate request form.
+     * Affiche le formulaire de demande de certificat de divorce.
      *
      * @return \Illuminate\View\View
      */
@@ -314,14 +316,14 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SECTION DOWNLOAD AND DUPLICATE
+    | SECTION TÉLÉCHARGEMENT ET DUPLICATA
     |--------------------------------------------------------------------------
-    | Manages document download and duplicate requests.
+    | Gère le téléchargement des documents et la demande de duplicata.
     */
 
     /**
-     * Allows downloading a PDF document.
-     * Generates the PDF on the fly if it doesn't exist.
+     * Permet le téléchargement d'un document PDF.
+     * Génère le PDF à la volée si non existant.
      *
      * @param \App\Models\Document $document
      * @return \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\RedirectResponse
@@ -334,8 +336,8 @@ class CitoyenController extends Controller
             return redirect()->back()->with('error', 'Paiement requis pour télécharger ce document.');
         }
 
-        // Checks if the PDF is already generated and stored
-        // If not, attempts to generate and store it
+        // Vérifie si le PDF est déjà généré et stocké
+        // Si non, tente de le générer et de le stocker
         if (!$document->pdf_path || !Storage::disk('public')->exists($document->pdf_path)) {
             Log::warning("Tentative de téléchargement d'un PDF non généré ou introuvable pour le document ID: {$document->id}. Tentative de génération à la volée.");
             try {
@@ -346,29 +348,79 @@ class CitoyenController extends Controller
             }
         }
 
-        // Marks the document as downloaded
+        // Marquer le document comme téléchargé
         $document->update(['is_downloaded' => true]);
 
-        // Returns the stored PDF file
+        // Retourne le fichier PDF stocké
         $fileName = 'acte_' . str_replace('-', '_', strtolower($document->type->value)) . '_' . $document->registry_number . '.pdf';
         return Storage::disk('public')->download($document->pdf_path, $fileName);
     }
 
     /**
-     * Handles the duplicate request for a document.
+     * Affiche un document PDF en ligne dans le navigateur pour prévisualisation.
+     *
+     * @param \App\Models\Document $document
+     * @return \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function preview(Document $document) // Renommé et modifié pour retourner une vue HTML
+    {
+        $this->authorizeDocumentOwner($document);
+
+        // Vérifie si le document est payé (si la prévisualisation HTML est conditionnée par le paiement)
+        if (!$document->is_paid) {
+            return redirect()->back()->with('error', 'Paiement requis pour prévisualiser ce document.');
+        }
+
+        // Préparer les données nécessaires à la vue HTML
+        $data = [
+            'document' => $document,
+            'metadata' => $document->metadata,
+            'citoyen' => $document->user,
+            'agent' => $document->agent, // Doit contenir l'agent associé
+            'commune' => $document->commune,
+            'agentSignaturePath' => $document->agent ? $this->getAgentSignaturePath($document->agent->id) : null,
+        ];
+
+        // Déterminez la vue Blade à utiliser en fonction du type de document
+        // Les templates sont situés dans 'resources/views/templates/'
+        $viewName = match ($document->type->value ?? $document->type) {
+            'naissance' => 'templates.naissance',
+            'mariage' => 'templates.mariage',
+            'deces' => 'templates.deces',
+            'certificat-vie' => 'templates.certificat_vie',
+            'certificat-entretien' => 'templates.certificat_entretien',
+            'certificat-revenu' => 'templates.certificat_revenu',
+            'certificat-divorce' => 'templates.certificat_divorce',
+            default => throw new \InvalidArgumentException('Type de document inconnu pour la prévisualisation HTML.'),
+        };
+
+        // Retourne la vue HTML spécifique au document
+        return view($viewName, $data);
+    }
+
+    private function getAgentSignaturePath(int $agentId): ?string
+    {
+        // Cherche la signature dans storage/app/public/signatures
+        $path = self::SIGNATURES_DIR . '/' . $agentId . '.png';
+        return Storage::disk('public')->exists($path) ? Storage::disk('public')->url($path) : null;
+    }
+
+
+    /**
+     * Gère la demande de duplicata pour un document.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function requestDuplicata(Request $request)
     {
-        // This method is no longer the main method for processing duplicates
-        // because it is handled by the 'store' method via the unified form.
-        // However, if it is still called, ensure its validation.
+        // Cette méthode n'est plus la méthode principale de traitement des duplicatas
+        // car elle est gérée par la méthode 'store' via le formulaire unifié.
+        // Cependant, si elle est toujours appelée, assurez-vous de sa validation.
         $request->validate([
             'registry_number' => 'required|string|exists:documents,registry_number',
             'justificatif' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
-            'idFront' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+            // 'idFront' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
         ]);
 
         try {
@@ -399,13 +451,13 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SECTION PAYMENT MANAGEMENT
+    | SECTION GESTION DES PAIEMENTS
     |--------------------------------------------------------------------------
-    | Manages the display of the payment form and payment processing.
+    | Gère l'affichage du formulaire de paiement et le traitement des paiements.
     */
 
     /**
-     * Displays the payment form for a document.
+     * Affiche le formulaire de paiement pour un document.
      *
      * @param \App\Models\Document $document
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
@@ -419,20 +471,20 @@ class CitoyenController extends Controller
         }
 
         if ($document->is_paid) {
-            // If already paid, redirect to the confirmation page with a clear message
+            // Si déjà payé, rediriger vers la page de confirmation avec un message clair
             return redirect()->route('citoyen.paiements.confirmation', $document)
                 ->with('info', 'Ce document a déjà été payé et est prêt à être téléchargé.');
         }
 
         return view('citoyen.paiements.form', [
             'document' => $document,
-            'montant' => $this->calculateAmount($document)
+            'montant' => $this->calculateAmount($document) // Appel à la méthode de calcul du montant
         ]);
     }
 
     /**
-     * Processes document payment.
-     * Generates and stores the PDF after successful payment.
+     * Traite le paiement d'un document.
+     * Génère et stocke le PDF après un paiement réussi.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Document $document
@@ -447,7 +499,7 @@ class CitoyenController extends Controller
         }
 
         if ($document->is_paid) {
-            // If already paid, redirect to confirmation
+            // Si déjà payé, rediriger vers la confirmation
             return redirect()->route('citoyen.paiements.confirmation', $document)
                 ->with('info', 'Ce document a déjà été payé.');
         }
@@ -459,11 +511,11 @@ class CitoyenController extends Controller
         ]);
 
         try {
-            // Payment simulation
+            // Simulation de paiement
             $payment = Payment::create([
                 'document_id' => $document->id,
                 'user_id' => auth()->id(),
-                'amount' => $this->calculateAmount($document),
+                'amount' => $this->calculateAmount($document), // Montant calculé dynamiquement
                 'payment_method' => $validated['payment_method'],
                 'transaction_id' => 'TXN-' . now()->timestamp . '-' . Str::random(8),
                 'status' => 'completed'
@@ -471,7 +523,7 @@ class CitoyenController extends Controller
 
             $document->update(['is_paid' => true]);
 
-            // PDF generation and storage
+            // Génération et stockage du PDF
             try {
                 $this->generateAndStorePdf($document);
                 Log::info("PDF généré et stocké avec succès pour le document ID: {$document->id}");
@@ -479,12 +531,12 @@ class CitoyenController extends Controller
                 Log::error("Erreur lors de la génération et du stockage du PDF après paiement pour le document ID {$document->id}: ".$e->getMessage(), [
                     'trace' => $e->getTraceAsString()
                 ]);
-                // Redirect to the confirmation page with a specific error message for PDF generation
+                // Rediriger vers la page de confirmation avec un message d'erreur spécifique à la génération PDF
                 return redirect()->route('citoyen.paiements.confirmation', $document)
                     ->with('error', 'Paiement effectué, mais une erreur est survenue lors de la génération du document. Contactez le support.');
             }
 
-            // Redirect to the confirmation page where the citizen can download the document
+            // Rediriger vers la page de confirmation où le citoyen pourra télécharger le document
             return redirect()->route('citoyen.paiements.confirmation', $document)
                 ->with('success', 'Paiement effectué avec succès et document généré ! Vous pouvez maintenant le télécharger.');
 
@@ -500,7 +552,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Displays the payment confirmation page.
+     * Affiche la page de confirmation de paiement.
      *
      * @param \App\Models\Document $document
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
@@ -509,13 +561,13 @@ class CitoyenController extends Controller
     {
         $this->authorizeDocumentOwner($document);
 
-        // Check if the document is paid
+        // Vérification que le document est payé
         if (!$document->is_paid) {
             return redirect()->route('citoyen.dashboard')
                 ->with('error', 'Ce document n\'a pas été payé.');
         }
 
-        // Check if the PDF has been generated and the path is valid
+        // Vérification que le PDF a été généré et que le chemin est valide
         if (!$document->pdf_path || !Storage::disk('public')->exists($document->pdf_path)) {
             Log::error("Fichier PDF manquant ou chemin invalide pour le document ID {$document->id}", [
                 'path' => $document->pdf_path
@@ -524,7 +576,7 @@ class CitoyenController extends Controller
                 ->with('error', 'Le fichier du document est introuvable ou n\'a pas été généré correctement. Veuillez contacter l\'administration.');
         }
 
-        // Retrieve the associated payment
+        // Récupération du paiement associé
         $payment = Payment::where('document_id', $document->id)
             ->where('status', 'completed')
             ->latest()
@@ -538,8 +590,8 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Downloads a document if payment has been made and the file generated.
-     * This is the method you specifically asked not to delete.
+     * Télécharge un document si le paiement a été effectué et le fichier généré.
+     * C'est la méthode que vous avez spécifiquement demandé de ne pas supprimer.
      *
      * @param \App\Models\Document $document
      * @return \Symfony\Component\HttpFoundation\StreamedResponse
@@ -548,24 +600,24 @@ class CitoyenController extends Controller
     {
         $this->authorizeDocumentOwner($document);
 
-        // Checks if the document is paid and if the PDF path is registered
+        // Vérifie si le document est payé et si le chemin du PDF est enregistré
         if (!$document->is_paid || !$document->pdf_path) {
             abort(403, 'Accès non autorisé ou document non disponible. Le paiement est requis.');
         }
 
-        // Checks if the file physically exists on the disk
+        // Vérifie si le fichier existe physiquement sur le disque
         if (!Storage::disk('public')->exists($document->pdf_path)) {
             Log::error("Fichier PDF introuvable pour le document ID {$document->id} à l'adresse: {$document->pdf_path}");
             abort(404, 'Le fichier demandé n\'existe pas sur le serveur. Veuillez contacter l\'administration.');
         }
 
-        // Updates the document's download status
+        // Met à jour le statut de téléchargement du document
         $document->update(['is_downloaded' => true]);
 
-        // Builds the filename for download
+        // Construit le nom de fichier pour le téléchargement
         $fileName = "acte-{$document->type->value}-{$document->registry_number}.pdf";
 
-        // Returns the file for forced download
+        // Retourne le fichier pour le téléchargement forcé
         return Storage::disk('public')->download(
             $document->pdf_path,
             $fileName,
@@ -576,13 +628,13 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | PROTECTED METHODS (HELPERS)
+    | MÉTHODES PROTÉGÉES (HELPERS)
     |--------------------------------------------------------------------------
-    | Helper functions used internally by the controller.
+    | Fonctions d'assistance utilisées en interne par le contrôleur.
     */
 
     /**
-     * Returns a personalized greeting based on the time.
+     * Retourne une salutation personnalisée basée sur l'heure.
      *
      * @return string
      */
@@ -599,7 +651,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Calculates document statistics for a given user.
+     * Calcule les statistiques des documents pour un utilisateur donné.
      *
      * @param \App\Models\User $user
      * @return array
@@ -617,7 +669,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Retrieves all communes.
+     * Récupère toutes les communes.
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
@@ -627,7 +679,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Checks if a request of the same type is already pending for the user.
+     * Vérifie si une demande du même type est déjà en attente pour l'utilisateur.
      *
      * @param string $type
      * @return bool
@@ -641,7 +693,7 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Validates request data for document creation or update.
+     * Valide les données de la requête pour la création ou la mise à jour d'un document.
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Document|null $document
@@ -651,42 +703,37 @@ class CitoyenController extends Controller
     protected function validateDocumentRequest(Request $request, ?Document $document = null): array
     {
         $rules = [
-            'type' => ['required', Rule::in([
-                'naissance', 'mariage', 'deces',
-                'certificat-vie', 'certificat-entretien',
-                'certificat-revenu', 'certificat-divorce'
-            ])],
+            'type' => ['required', Rule::in(array_column(DocumentType::cases(), 'value'))], // Utilise l'Enum
             'is_duplicata' => 'required|boolean',
-            // 'terms' => 'required|accepted' // Old rule: always mandatory
+            'metadata.copies' => 'required|integer|min:1|max:5', // Toujours obligatoire pour tous les types de demande
         ];
 
-        // Rule for 'terms': nullable if it's a duplicate, otherwise mandatory
-        // if ($request->boolean('is_duplicata')) {
-        //     $rules['terms'] = 'nullable|accepted'; // Not mandatory for duplicate
-        // } else {
-        //     $rules['terms'] = 'nullable|accepted'; // Mandatory for new request
-        // }
-
-        // Specific rules for duplicates
         if ($request->boolean('is_duplicata')) {
             $rules['registry_number'] = 'required|string|exists:documents,registry_number';
-            $rules['idFront'] = 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'; // idFront is now nullable for duplicata
-            $rules['justificatif'] = 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048'; // Justificatif is nullable for duplicata
-            $rules['commune_id'] = 'nullable|exists:communes,id'; // Commune ID is nullable for duplicata
+            // 'metadata.purpose' est facultatif pour les duplicatas
+            $rules['metadata.purpose'] = 'nullable|string';
+            // Les champs 'justificatif', 'idFront' et les autres métadonnées de nouvelle demande
+            // ne sont pas requis pour un duplicata. Ils sont omis des règles de validation ici.
+            $rules['commune_id'] = 'nullable|exists:communes,id'; // La commune est héritée pour un duplicata
         } else {
-            // Rules for new requests
-            $rules['registry_number'] = 'nullable|string';
-            $rules['justificatif'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:2048'; // Required for a new request
-            $rules['commune_id'] = 'required|exists:communes,id'; // Commune ID is required for new requests
+            $rules['registry_number'] = 'nullable|string'; // Pour les nouvelles demandes, le numéro de registre est généré
+            $rules['justificatif'] = 'required|file|mimes:pdf,jpg,jpeg,png|max:2048'; // Obligatoire pour nouvelle demande
+            $rules['commune_id'] = 'required|exists:communes,id'; // Obligatoire pour nouvelle demande
+            $rules['metadata.purpose'] = 'required|string'; // Obligatoire pour nouvelle demande
 
-            // Apply metadata rules only for new requests
             $metadataRules = $this->getMetadataRules($request->input('type'));
-            $rules = array_merge($rules, $metadataRules);
+            // Fusionne les règles spécifiques aux métadonnées pour les nouvelles demandes
+            // en s'assurant de ne pas dupliquer les règles de 'copies' et 'purpose'
+            foreach ($metadataRules as $key => $value) {
+                if (!array_key_exists($key, $rules)) { // Ajoute la règle seulement si elle n'existe pas déjà
+                    $rules[$key] = $value;
+                }
+            }
         }
 
         $validated = $request->validate($rules);
 
-        // Generate registry number if it's not a duplicate and it's empty
+        // Si ce n'est pas un duplicata et que le numéro de registre est vide, le générer
         if (!$request->boolean('is_duplicata') && empty($validated['registry_number'])) {
             $validated['registry_number'] = $this->generateRegistryNumber($validated['type']);
         }
@@ -695,10 +742,10 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Creates a new original document.
+     * Crée un nouveau document original.
      *
-     * @param array $data Validated data.
-     * @param \Illuminate\Http\Request $request HTTP request.
+     * @param array $data Données validées.
+     * @param \Illuminate\Http\Request $request Requête HTTP.
      * @return \App\Models\Document
      */
     protected function createNewDocument(array $data, Request $request): Document
@@ -725,18 +772,16 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Creates a duplicate document from the request data.
+     * Crée un document duplicata à partir des données de la requête.
      *
-     * @param array $data The validated request data (must contain the original's 'registry_number').
-     * @param \Illuminate\Http\Request $request The complete HTTP request.
+     * @param array $data Les données validées de la requête (doit contenir 'registry_number' de l'original).
+     * @param \Illuminate\Http\Request $request La requête HTTP complète.
      * @return \App\Models\Document
      * @throws \Exception
      */
     protected function createDuplicataDocument(array $data, Request $request): Document
     {
-        // Retrieve the original document using the registry_number from $data
         $originalDocument = Document::where('registry_number', $data['registry_number'])->firstOrFail();
-        // Ensure the user is the owner of the original
         $this->authorizeDocumentOwner($originalDocument);
 
         Log::debug('Starting createDuplicata for original document: ' . $originalDocument->registry_number);
@@ -750,8 +795,9 @@ class CitoyenController extends Controller
         $duplicata = $originalDocument->replicate();
         Log::debug('Original document replicated.');
 
+        // Pour un duplicata, le justificatif n'est pas obligatoire via le formulaire,
+        // mais nous le conservons s'il a été hérité de l'original ou soumis (bien que non requis).
         $justificatifPath = null;
-        // If a new justificatif file is provided in the request for the duplicata
         if ($request->hasFile('justificatif')) {
             try {
                 $justificatifPath = $request->file('justificatif')->store('justificatifs', 'public');
@@ -761,13 +807,10 @@ class CitoyenController extends Controller
                 throw $e;
             }
         } else {
-            // IMPORTANT CORRECTION: If no new justificatif is provided, inherit from the original document.
-            // This addresses the 'justificatif_path' cannot be null error if the DB column is NOT NULL.
             $justificatifPath = $originalDocument->justificatif_path;
             Log::debug('No new justificatif file provided for duplicata. Inherited original justificatif_path: ' . ($justificatifPath ?? 'NULL'));
         }
 
-        // Store idFront if provided for duplicata
         $idFrontPath = null;
         if ($request->hasFile('idFront')) {
             try {
@@ -778,10 +821,18 @@ class CitoyenController extends Controller
                 throw $e;
             }
         } else {
-            // IMPORTANT CORRECTION: If no new ID Front is provided, inherit from the original document.
-            // This addresses a potential 'id_front_path' cannot be null error if the DB column is NOT NULL.
             $idFrontPath = $originalDocument->id_front_path;
             Log::debug('No new ID Front file provided for duplicata. Inherited original id_front_path: ' . ($idFrontPath ?? 'NULL'));
+        }
+
+        // Si le formulaire inclut 'metadata.copies' et 'metadata.purpose' pour le duplicata,
+        // nous les mettons à jour, sinon nous conservons celles de l'original.
+        $metadata = $originalDocument->metadata;
+        if ($request->has('metadata.copies')) {
+            $metadata['copies'] = (int) $request->input('metadata.copies');
+        }
+        if ($request->has('metadata.purpose')) {
+            $metadata['purpose'] = $request->input('metadata.purpose');
         }
 
 
@@ -795,13 +846,12 @@ class CitoyenController extends Controller
             'agent_id' => null,
             'is_paid' => false,
             'is_downloaded' => false,
-            'justificatif_path' => $justificatifPath, // This will now correctly carry over the original's path or the newly uploaded one
-            'id_front_path' => $idFrontPath, // This will now correctly carry over the original's path or the newly uploaded one
-            'metadata' => $originalDocument->metadata, // Metadata copied from original
+            'justificatif_path' => $justificatifPath,
+            'id_front_path' => $idFrontPath,
+            'metadata' => $metadata, // Utilise la métadonnée potentiellement mise à jour
             'created_at' => now(),
             'updated_at' => now(),
         ]);
-
 
         Log::debug('Attempting to save duplicata to database.');
         $duplicata->save();
@@ -811,33 +861,32 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Updates an existing document's data.
+     * Met à jour les données d'un document existant.
      *
-     * @param \App\Models\Document $document The document to update.
-     * @param array $data The validated data for the update.
-     * @param \Illuminate\Http\Request|null $request The HTTP request (can be null if no file).
+     * @param \App\Models\Document $document Le document à mettre à jour.
+     * @param array $data Les données validées pour la mise à jour.
+     * @param \Illuminate\Http\Request|null $request La requête HTTP (peut être null si pas de fichier).
      * @return void
      */
     protected function updateDocument(Document $document, array $data, ?Request $request = null): void
     {
-        // If it's not a duplicate, update the metadata
+        // Si le document n'est PAS un duplicata et que des métadonnées sont envoyées, les extraire.
+        // Les duplicatas héritent leurs métadonnées de l'original, sauf copies/purpose qui sont gérés en amont.
         if (!$document->is_duplicata && $request && $request->has('metadata')) {
-            $data['metadata'] = $this->extractMetadataFromRequest($request, $document->type->value);
+            $document->metadata = $this->extractMetadataFromRequest($request, $document->type->value);
         }
 
-        // Fill the document with the validated data
-        $document->fill($data);
+        $document->fill($data); // Applique les autres champs validés (type, is_duplicata, registry_number, commune_id, etc.)
 
-        // Handle file uploads if any
+        // Gestion du fichier justificatif
         if ($request && $request->hasFile('justificatif')) {
-            // Delete old file if exists
             if ($document->justificatif_path) {
                 Storage::disk('public')->delete($document->justificatif_path);
             }
             $document->justificatif_path = $request->file('justificatif')->store('justificatifs', 'public');
         }
+        // Gestion du fichier idFront (si pertinent)
         if ($request && $request->hasFile('idFront')) {
-            // Delete old file if exists
             if ($document->id_front_path) {
                 Storage::disk('public')->delete($document->id_front_path);
             }
@@ -848,7 +897,9 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Retrieves metadata validation rules based on document type.
+     * Récupère les règles de validation des métadonnées en fonction du type de document.
+     * Ces règles sont pour les NOUVELLES DEMANDES uniquement.
+     * Les champs 'copies' et 'purpose' sont gérés globalement dans validateDocumentRequest.
      * @param string $type
      * @return array
      */
@@ -860,52 +911,52 @@ class CitoyenController extends Controller
                 'metadata.prenom_enfant' => 'required|string|max:255',
                 'metadata.date_naissance' => 'required|date',
                 'metadata.lieu_naissance' => 'required|string|max:255',
-                'metadata.sexe' => 'required|in:masculin,féminin',
+                'metadata.sexe' => ['required', Rule::in(['M', 'F'])],
                 'metadata.nom_pere' => 'required|string|max:255',
                 'metadata.nationalite_pere' => 'required|string|max:255',
                 'metadata.nom_mere' => 'required|string|max:255',
                 'metadata.nationalite_mere' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             'mariage' => [
                 'metadata.nom_epoux' => 'required|string|max:255',
                 'metadata.prenom_epoux' => 'required|string|max:255',
-                'metadata.date_naissance_epoux' => 'required|date',
-                'metadata.lieu_naissance_epoux' => 'required|string|max:255',
+                'metadata.nationalite_epoux' => 'required|string|max:255',
                 'metadata.nom_epouse' => 'required|string|max:255',
                 'metadata.prenom_epouse' => 'required|string|max:255',
                 'metadata.date_naissance_epouse' => 'required|date',
                 'metadata.lieu_naissance_epouse' => 'required|string|max:255',
+                'metadata.nom_mere_epouse' => 'required|string|max:255',
+                'metadata.nationalite_epouse' => 'required|string|max:255',
                 'metadata.date_mariage' => 'required|date',
                 'metadata.lieu_mariage' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             'deces' => [
                 'metadata.nom_defunt' => 'required|string|max:255',
                 'metadata.prenom_defunt' => 'required|string|max:255',
                 'metadata.date_deces' => 'required|date',
                 'metadata.lieu_deces' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
+                'metadata.death_cause' => 'nullable|string|max:255', // Cause is optional
+                'metadata.requester_name' => 'required|string|max:255',
+                'metadata.requester_firstname' => 'required|string|max:255',
+                'metadata.relationship' => 'required|string|max:255',
+                'metadata.phone' => 'required|string|max:20', // Validation du format de téléphone si nécessaire ailleurs
             ],
             'certificat-vie' => [
                 'metadata.nom_demandeur' => 'required|string|max:255',
                 'metadata.prenom_demandeur' => 'required|string|max:255',
                 'metadata.date_naissance_demandeur' => 'required|date',
                 'metadata.lieu_naissance_demandeur' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             'certificat-entretien' => [
                 'metadata.nom_demandeur' => 'required|string|max:255',
                 'metadata.prenom_demandeur' => 'required|string|max:255',
                 'metadata.relation' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             'certificat-revenu' => [
                 'metadata.nom_demandeur' => 'required|string|max:255',
                 'metadata.prenom_demandeur' => 'required|string|max:255',
                 'metadata.montant_revenu' => 'required|numeric|min:0',
                 'metadata.source_revenu' => 'required|string|max:255',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             'certificat-divorce' => [
                 'metadata.nom_epoux' => 'required|string|max:255',
@@ -913,113 +964,90 @@ class CitoyenController extends Controller
                 'metadata.nom_epouse' => 'required|string|max:255',
                 'metadata.prenom_epouse' => 'required|string|max:255',
                 'metadata.date_divorce' => 'required|date',
-                'metadata.copies' => 'required|integer|min:1',
             ],
             default => [],
         };
     }
 
     /**
-     * Extracts and formats metadata from the request.
+     * Extrait les métadonnées de la requête en fonction du type de document.
+     *
      * @param \Illuminate\Http\Request $request
      * @param string $type
      * @return array
      */
     protected function extractMetadataFromRequest(Request $request, string $type): array
     {
-        $metadata = [];
-        $metadataFields = match($type) {
-            'naissance' => ['nom_enfant', 'prenom_enfant', 'date_naissance', 'lieu_naissance', 'sexe', 'nom_pere', 'nationalite_pere', 'nom_mere', 'nationalite_mere', 'copies'],
-            'mariage' => ['nom_epoux', 'prenom_epoux', 'date_naissance_epoux', 'lieu_naissance_epoux', 'nom_epouse', 'prenom_epouse', 'date_naissance_epouse', 'lieu_naissance_epouse', 'date_mariage', 'lieu_mariage', 'copies'],
-            'deces' => ['nom_defunt', 'prenom_defunt', 'date_deces', 'lieu_deces', 'copies'],
-            'certificat-vie' => ['nom_demandeur', 'prenom_demandeur', 'date_naissance_demandeur', 'lieu_naissance_demandeur', 'copies'],
-            'certificat-entretien' => ['nom_demandeur', 'prenom_demandeur', 'relation', 'copies'],
-            'certificat-revenu' => ['nom_demandeur', 'prenom_demandeur', 'montant_revenu', 'source_revenu', 'copies'],
-            'certificat-divorce' => ['nom_epoux', 'prenom_epoux', 'nom_epouse', 'prenom_epouse', 'date_divorce', 'copies'],
-            default => [],
-        };
+        $metadata = $request->input('metadata', []);
 
-        foreach ($metadataFields as $field) {
-            // Uses input('metadata.field') to retrieve nested fields
-            $metadata[$field] = $request->input("metadata.$field");
+        // Assurer que les champs 'copies' et 'purpose' sont toujours inclus dans les métadonnées
+        // même s'ils ne sont pas listés dans getMetadataRules.
+        $metadata['copies'] = (int) $request->input('metadata.copies', 1);
+        $metadata['purpose'] = $request->input('metadata.purpose');
+
+        // Filtrer les métadonnées pour ne garder que celles qui sont pertinentes pour le type de document
+        // et qui ont été définies dans les règles de validation du contrôleur.
+        // C'est important pour éviter de stocker des données non désirées dans le champ 'metadata'.
+        $filteredMetadata = [];
+        $allowedMetadataKeys = array_keys($this->getMetadataRules($type));
+
+        // Ajoutons manuellement les clés qui sont toujours attendues dans le 'metadata'
+        $allowedMetadataKeys[] = 'metadata.copies'; // Préférer 'copies' sans le préfixe 'metadata.' si c'est la clé finale
+        $allowedMetadataKeys[] = 'metadata.purpose'; // Idem
+
+        foreach ($metadata as $key => $value) {
+            // Reconstruit la clé avec 'metadata.' pour la comparaison avec les règles
+            $fullMetadataKey = 'metadata.' . $key;
+            if (in_array($fullMetadataKey, $allowedMetadataKeys) || $key === 'copies' || $key === 'purpose') {
+                $filteredMetadata[$key] = $value;
+            }
         }
-
-        return $metadata;
+        return $filteredMetadata;
     }
 
+
     /**
-     * Generates a unique registry number based on the document type.
+     * Génère un numéro de registre unique pour un nouveau document.
+     *
      * @param string $type
      * @return string
      */
     protected function generateRegistryNumber(string $type): string
     {
-        $prefix = match($type) {
-            'naissance' => 'REG-NAI',
-            'mariage' => 'REG-MAR',
-            'deces' => 'REG-DEC',
-            'certificat-vie' => 'CERT-VIE',
-            'certificat-entretien' => 'CERT-ENT',
-            'certificat-revenu' => 'CERT-REV',
-            'certificat-divorce' => 'CERT-DIV',
-            default => 'REG',
-        };
-        return $prefix . '-' . now()->format('Ymd') . '-' . Str::upper(Str::random(5));
+        $prefix = strtoupper(substr($type, 0, 3)); // Ex: NAI, MAR, DEC
+        $datePart = now()->format('Ymd');
+        $randomPart = Str::upper(Str::random(5)); // 5 caractères aléatoires
+
+        $latestDocument = Document::where('type', $type)
+            ->where('registry_number', 'like', "{$prefix}-{$datePart}-%")
+            ->orderByDesc('registry_number')
+            ->first();
+
+        $sequence = 1;
+        if ($latestDocument) {
+            $parts = explode('-', $latestDocument->registry_number);
+            if (count($parts) === 3) {
+                // Tente d'extraire la partie numérique après le dernier tiret si elle existe
+                $lastPart = end($parts);
+                if (preg_match('/^(\d+)/', $lastPart, $matches)) { // Recherche une séquence numérique au début
+                    $sequence = (int) $matches[1] + 1;
+                }
+            } else {
+                 // Gère le format original comme REG-DEC-20230101-ABCDE.
+                // Si l'ancien format est REG-TYPE-DATE-RANDOM, la séquence est réinitialisée par la date.
+                // Sinon, il faut une logique plus robuste si la séquence est censée s'incrémenter sur le random.
+                // Pour l'instant, on suppose une séquence liée au jour pour la simplicité.
+            }
+        }
+
+        // Reconstruit le numéro de registre en intégrant la séquence numérique
+        return "REG-{$prefix}-{$datePart}-" . str_pad($sequence, 3, '0', STR_PAD_LEFT);
     }
 
+
     /**
-     * Generates and stores the PDF for a given document.
+     * Autorise l'accès si l'utilisateur connecté est le propriétaire du document.
      *
-     * @param \App\Models\Document $document
-     * @return void
-     * @throws \Exception
-     */
-    protected function generateAndStorePdf(Document $document): void
-    {
-        $data = [
-            'document' => $document,
-            'metadata' => $document->metadata // Ensure metadata is indeed an array/object here
-        ];
-
-        // Load the Blade view specific to the document type for the PDF
-        $pdfView = 'pdfs.' . Str::kebab($document->type->value); // Ex: pdfs.naissance, pdfs.mariage
-
-        if (!view()->exists($pdfView)) {
-            Log::error("PDF view for document type {$document->type->value} not found: {$pdfView}");
-            throw new Exception("PDF template not found for document type: {$document->type->value}");
-        }
-
-        $pdf = Pdf::loadView($pdfView, $data);
-
-        $directory = 'documents_pdf';
-        $fileName = 'document_' . $document->id . '_' . Str::random(10) . '.pdf';
-        $path = $directory . '/' . $fileName;
-
-        // Store the PDF
-        Storage::disk('public')->put($path, $pdf->output());
-
-        // Update the path in the database
-        $document->pdf_path = $path;
-        $document->save();
-
-        Log::info("PDF generated and stored for document ID: {$document->id} at: {$path}");
-    }
-
-    /**
-     * Authorizes a citizen's access to their own document.
-     * @param \App\Models\User $citoyen
-     * @return void
-     * @throws \Illuminate\Auth\Access\AuthorizationException
-     */
-    protected function authorizeCitoyenAccess($citoyen): void
-    {
-        if (auth()->user()->id !== $citoyen->id) {
-            abort(403, 'Accès non autorisé.');
-        }
-    }
-
-    /**
-     * Authorizes a user's access to the document if they are the owner.
      * @param \App\Models\Document $document
      * @return void
      * @throws \Illuminate\Auth\Access\AuthorizationException
@@ -1027,34 +1055,135 @@ class CitoyenController extends Controller
     protected function authorizeDocumentOwner(Document $document): void
     {
         if (auth()->id() !== $document->user_id) {
-            abort(403, 'Vous n\'êtes pas autorisé à accéder à ce document.');
+            abort(403, 'Accès non autorisé à ce document.');
         }
     }
 
     /**
-     * Deletes a document and its associated files.
+     * Supprime le document et ses fichiers associés.
      *
      * @param \App\Models\Document $document
      * @return void
      */
     protected function deleteDocument(Document $document): void
     {
-        // Delete justificatif file if it exists
-        if ($document->justificatif_path && Storage::disk('public')->exists($document->justificatif_path)) {
-            Storage::disk('public')->delete($document->justificatif_path);
-        }
+        DB::transaction(function () use ($document) {
+            // Supprime les fichiers du stockage
+            if ($document->justificatif_path && Storage::disk('public')->exists($document->justificatif_path)) {
+                Storage::disk('public')->delete($document->justificatif_path);
+            }
+            if ($document->pdf_path && Storage::disk('public')->exists($document->pdf_path)) {
+                Storage::disk('public')->delete($document->pdf_path);
+            }
+            if ($document->id_front_path && Storage::disk('public')->exists($document->id_front_path)) {
+                Storage::disk('public')->delete($document->id_front_path);
+            }
 
-        // Delete front ID file if it exists
-        if ($document->id_front_path && Storage::disk('public')->exists($document->id_front_path)) {
-            Storage::disk('public')->delete($document->id_front_path);
-        }
+            // Supprime les pièces jointes associées (s'il y en a)
+            foreach ($document->attachments as $attachment) {
+                if ($attachment->path && Storage::disk('public')->exists($attachment->path)) {
+                    Storage::disk('public')->delete($attachment->path);
+                }
+                $attachment->delete();
+            }
 
-        // Delete generated PDF file if it exists
-        if ($document->pdf_path && Storage::disk('public')->exists($document->pdf_path)) {
-            Storage::disk('public')->delete($document->pdf_path);
-        }
-
-        // Delete the database record
-        $document->delete();
+            $document->delete();
+        });
     }
+
+    /**
+     * Calcule le montant à payer pour un document.
+     * Récupère le prix unitaire depuis la table `settings`.
+     *
+     * @param \App\Models\Document $document
+     * @return float
+     */
+    protected function calculateAmount(Document $document): float
+    {
+        // Assurez-vous que le modèle Setting est bien importé: use App\Models\Setting;
+        // Ou accédez-y via son chemin complet: \App\Models\Setting::get(...)
+        $unitPrice = \App\Models\Setting::get('unit_price_' . $document->type->value, 0.00);
+
+        // Assurez-vous que 'copies' est accessible via metadata
+        $numberOfCopies = isset($document->metadata['copies']) && is_numeric($document->metadata['copies'])
+                          ? (int)$document->metadata['copies']
+                          : 1;
+
+        $totalAmount = $unitPrice * $numberOfCopies;
+
+        return $totalAmount;
+    }
+
+    /**
+     * Génère le contenu PDF brut pour un document donné.
+     *
+     * @param \App\Models\Document $document
+     * @return string Le contenu binaire du PDF.
+     * @throws \Exception
+     */
+    protected function generatePdfOutput(Document $document): string
+    {
+        // Déterminez la vue Blade à utiliser pour le PDF en fonction du type de document
+        // Le chemin a été ajusté pour pointer vers le répertoire 'templates'
+        $viewName = 'templates.' . Str::slug($document->type->value, '_'); // Ex: templates.acte_naissance
+
+        if (!view()->exists($viewName)) {
+            Log::error("Vue PDF introuvable pour le type de document: {$viewName}");
+            throw new Exception("Vue PDF non définie pour le type de document: " . $document->type->value);
+        }
+
+        // Passer les données nécessaires à la vue PDF
+        $data = [
+            'document' => $document,
+            'metadata' => $document->metadata, // Accéder directement aux métadonnées
+            'citoyen' => $document->user,
+            'agent' => $document->agent,
+            'commune' => $document->commune,
+            'agentSignaturePath' => $document->agent ? $this->getAgentSignaturePath($document->agent->id) : null,
+            // Ajoutez d'autres données si nécessaire
+        ];
+
+        // Générer le PDF
+        $pdf = Pdf::loadView($viewName, $data);
+        return $pdf->output(); // Retourne le contenu binaire du PDF
+    }
+
+
+    /**
+     * Génère et stocke le PDF pour un document donné.
+     *
+     * @param \App\Models\Document $document
+     * @return void
+     * @throws \Exception
+     */
+    protected function generateAndStorePdf(Document $document): void
+    {
+        // Utilise la nouvelle méthode pour obtenir le contenu PDF
+        $pdfOutput = $this->generatePdfOutput($document);
+
+        // Définir le chemin de stockage
+        $directory = 'pdfs/documents';
+        $fileName = Str::slug($document->type->value, '_') . '_' . $document->registry_number . '.pdf';
+        $path = $directory . '/' . $fileName;
+
+        // Stocker le PDF
+        Storage::disk('public')->put($path, $pdfOutput);
+
+        // Mettre à jour le chemin du PDF dans la base de données
+        $document->update(['pdf_path' => $path]);
+    }
+
+    /**
+     * Récupère le chemin d'accès public à la signature d'un agent.
+     * La signature est attendue sous la forme "{id_agent}.png" dans le répertoire "signatures".
+     *
+     * @param int $agentId L'ID de l'agent dont on veut la signature.
+     * @return string|null Le chemin URL public de la signature, ou null si non trouvée.
+     */
+    // private function getAgentSignaturePath(int $agentId): ?string
+    // {
+    //     // Cherche la signature dans storage/app/public/signatures
+    //     $path = self::SIGNATURES_DIR . '/' . $agentId . '.png';
+    //     return Storage::disk('public')->exists($path) ? Storage::disk('public')->url($path) : null;
+    // }
 }

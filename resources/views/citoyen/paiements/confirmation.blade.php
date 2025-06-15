@@ -42,6 +42,13 @@
                         <a href="{{ route('citoyen.demandes.download', $document) }}" class="btn btn-primary btn-lg">
                             <i class="fas fa-download me-2"></i> Télécharger le document
                         </a>
+                        <a href="{{ route('citoyen.demandes.preview', $document) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-eye me-2"></i> Prévisualiser le document
+                        </a>
+                        {{-- <div class="modal-body p-0">
+                                    <!-- L'iframe chargera le PDF via la route de prévisualisation -->
+                                    <iframe src="{{ route('citoyen.demandes.preview', $document->id) }}" class="pdf-preview-iframe"></iframe>
+                                </div> --}}
                         <a href="{{ route('citoyen.dashboard') }}" class="btn btn-outline-secondary">
                             <i class="fas fa-home me-2"></i> Retour au tableau de bord
                         </a>

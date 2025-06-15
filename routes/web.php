@@ -47,6 +47,7 @@
             Route::get('/certificat-revenu', [CitoyenController::class, 'formRevenu'])->name('revenu');
             Route::get('/certificat-divorce', [CitoyenController::class, 'formDivorce'])->name('divorce');
             Route::get('/{document}/download', [CitoyenController::class, 'downloadDocument'])->name('download');
+            Route::get('/{document}/preview', [CitoyenController::class, 'preview'])->name('preview');
 
             // Routes CRUD
             Route::get('/', [CitoyenController::class, 'index'])->name('index');

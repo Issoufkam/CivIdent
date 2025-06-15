@@ -317,10 +317,18 @@
       <!-- Partie ÉPOUSE à ajouter ici si souhaité -->
 
       <div class="official-section">
-        <div class="signature">
-          <div class="signature-line"></div>
-          <div class="official-title">Officier de l'État Civil</div>
-        </div>
+        <div class="signature-block">
+                <p>L’Officier d’état civil</p>
+                @if (!empty($signaturePath))
+                    <img src="{{ asset($signaturePath) }}" alt="Signature de l'agent" width="100">
+                @else
+                    <p>Signature non disponible</p>
+                @endif
+                <p class="fw-bold">
+                    {{ $document->user->prenom ?? Auth::user()->prenom }}
+                    {{ $document->user->nom ?? Auth::user()->nom }}
+                </p>
+            </div>
         <div class="stamp">Cachet de la mairie
         {{-- @if(isset($timbre)) --}}
           <img src="https://uvicoci.com/wp-content/uploads/2021/08/240879580_4674468529265097_2133671838465871025_n.jpg" alt="Timbre officiel" style="width: 100%; height: 100%; object-fit: contain;">
@@ -334,7 +342,7 @@
       <button class="btn btn-outline-primary" onclick="window.print()">
         Imprimer
       </button>
-      <a href="{{ route('agent.documents.show', $document->id) }}" class="btn btn-secondary">
+      <a href="{{ route('citoyen.paiements.confirmation', $document->id) }}" class="btn btn-secondary">
         Retour
       </a>
     </div>
