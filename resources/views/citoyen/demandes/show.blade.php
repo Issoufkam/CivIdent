@@ -7,7 +7,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 @endif
-<H1>Détails de la demande</H1>
+
 @if(session('error'))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ session('error') }}
@@ -190,9 +190,9 @@
                                             $fields = [
                                                 'nom_epoux' => "Nom de l'époux",
                                                 'prenom_epoux' => "Prénom de l'époux",
-                                                'date_naissance_epoux' => "Date de naissance de l'époux",
-                                                'lieu_naissance_epoux' => "Lieu de naissance de l'époux",
-                                                'nom_mere_epoux' => "Nom de la mère de l'époux",
+                                                // 'date_naissance_epoux' => "Date de naissance de l'époux",
+                                                // 'lieu_naissance_epoux' => "Lieu de naissance de l'époux",
+                                                // 'nom_mere_epoux' => "Nom de la mère de l'époux",
                                                 'nationalite_epoux' => "Nationalité de l'époux",
                                                 'nom_epouse' => "Nom de l'épouse",
                                                 'prenom_epouse' => "Prénom de l'épouse",

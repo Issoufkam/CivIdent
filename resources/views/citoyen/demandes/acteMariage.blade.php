@@ -27,7 +27,6 @@
             @csrf
             <input type="hidden" name="type" value="mariage">
 
-            <!-- Type de Demande -->
             <div class="section">
                 <h3 class="section-title">Type de Demande</h3>
                 <div class="form-check form-check-inline">
@@ -40,25 +39,23 @@
                 </div>
             </div>
 
-            <!-- Section Nouvelle Demande -->
             <div id="newRequestFields">
-                <!-- Informations du Mariage -->
                 <div class="section">
                     <h3 class="section-title">Informations du Mariage</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label required" for="date_mariage">Date du Mariage</label>
-                            <input type="date" class="form-control @error('metadata.date_mariage') is-invalid @enderror" name="metadata[date_mariage]" id="date_mariage" value="{{ old('metadata.date_mariage') }}" required>
+                            <input type="date" class="form-control @error('metadata.date_mariage') is-invalid @enderror" name="metadata[date_mariage]" id="date_mariage" value="{{ old('metadata.date_mariage') }}">
                             @error('metadata.date_mariage')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="lieu_mariage">Lieu du Mariage</label>
-                            <input type="text" class="form-control @error('metadata.lieu_mariage') is-invalid @enderror" name="metadata[lieu_mariage]" id="lieu_mariage" value="{{ old('metadata.lieu_mariage') }}" required>
+                            <input type="text" class="form-control @error('metadata.lieu_mariage') is-invalid @enderror" name="metadata[lieu_mariage]" id="lieu_mariage" value="{{ old('metadata.lieu_mariage') }}">
                             @error('metadata.lieu_mariage')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="commune_id">Commune ou Sous-Préfecture</label>
-                            <select class="form-select @error('commune_id') is-invalid @enderror" name="commune_id" id="commune_id" required>
+                            <select class="form-select @error('commune_id') is-invalid @enderror" name="commune_id" id="commune_id">
                                 <option value="">Sélectionnez votre commune ou sous-préfecture</option>
                                 @foreach ($communes as $commune)
                                     <option value="{{ $commune->id }}" {{ old('commune_id') == $commune->id ? 'selected' : '' }}>
@@ -71,45 +68,43 @@
                     </div>
                 </div>
 
-                <!-- Informations des Époux -->
                 <div class="section">
                     <h3 class="section-title">Informations des Époux</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label required" for="nom_epoux">Nom complet de l'Époux</label>
-                            <input type="text" class="form-control @error('metadata.nom_epoux') is-invalid @enderror" name="metadata[nom_epoux]" id="nom_epoux" value="{{ old('metadata.nom_epoux') }}" required>
+                            <input type="text" class="form-control @error('metadata.nom_epoux') is-invalid @enderror" name="metadata[nom_epoux]" id="nom_epoux" value="{{ old('metadata.nom_epoux') }}">
                             @error('metadata.nom_epoux')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="nationalite_epoux">Nationalité de l'Époux</label>
-                            <input type="text" class="form-control @error('metadata.nationalite_epoux') is-invalid @enderror" name="metadata[nationalite_epoux]" id="nationalite_epoux" value="{{ old('metadata.nationalite_epoux') }}" required>
+                            <input type="text" class="form-control @error('metadata.nationalite_epoux') is-invalid @enderror" name="metadata[nationalite_epoux]" id="nationalite_epoux" value="{{ old('metadata.nationalite_epoux') }}">
                             @error('metadata.nationalite_epoux')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="nom_epouse">Nom complet de l'Épouse</label>
-                            <input type="text" class="form-control @error('metadata.nom_epouse') is-invalid @enderror" name="metadata[nom_epouse]" id="nom_epouse" value="{{ old('metadata.nom_epouse') }}" required>
+                            <input type="text" class="form-control @error('metadata.nom_epouse') is-invalid @enderror" name="metadata[nom_epouse]" id="nom_epouse" value="{{ old('metadata.nom_epouse') }}">
                             @error('metadata.nom_epouse')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="nationalite_epouse">Nationalité de l'Épouse</label>
-                            <input type="text" class="form-control @error('metadata.nationalite_epouse') is-invalid @enderror" name="metadata[nationalite_epouse]" id="nationalite_epouse" value="{{ old('metadata.nationalite_epouse') }}" required>
+                            <input type="text" class="form-control @error('metadata.nationalite_epouse') is-invalid @enderror" name="metadata[nationalite_epouse]" id="nationalite_epouse" value="{{ old('metadata.nationalite_epouse') }}">
                             @error('metadata.nationalite_epouse')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                     </div>
                 </div>
 
-                <!-- Pièces Justificatives -->
                 <div class="section">
                     <h3 class="section-title">Pièces Justificatives</h3>
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label required" for="justificatif">Pièce jointe</label>
-                            <input type="file" class="form-control @error('justificatif') is-invalid @enderror" name="justificatif" id="justificatif" required>
+                            <input type="file" class="form-control @error('justificatif') is-invalid @enderror" name="justificatif" id="justificatif">
                             @error('justificatif')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
                         <div class="col-md-6">
                             <label class="form-label required" for="copies">Nombre de Copies</label>
-                            <select class="form-select @error('metadata.copies') is-invalid @enderror" id="copies" name="metadata[copies]" required>
+                            <select class="form-select @error('metadata.copies') is-invalid @enderror" id="copies" name="metadata[copies]">
                                 <option value="1" {{ old('metadata.copies') == '1' ? 'selected' : '' }}>1</option>
                                 <option value="2" {{ old('metadata.copies') == '2' ? 'selected' : '' }}>2</option>
                                 <option value="3" {{ old('metadata.copies') == '3' ? 'selected' : '' }}>3</option>
@@ -122,7 +117,6 @@
                 </div>
             </div>
 
-            <!-- Section Duplicata -->
             <div id="duplicataFields" style="display:none;">
                 <div class="section">
                     <h3 class="section-title">Duplicata - Renseignez le numéro du registre</h3>
@@ -131,14 +125,13 @@
                         <input type="text" class="form-control @error('registry_number') is-invalid @enderror" name="registry_number" id="registry_number" placeholder="Numéro du registre" value="{{ old('registry_number') }}">
                         @error('registry_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    {{-- <div class="mb-3">
+                    <div class="mb-3">
                         <label class="form-label required" for="idFront">Pièce d'identité (recto)</label>
                         <input type="file" class="form-control @error('idFront') is-invalid @enderror" name="idFront" id="idFront">
                         @error('idFront')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div> --}}
+                    </div>
                 </div>
             </div>
-            <!-- Boutons de soumission -->
             <div class="text-center mt-4">
                 <button type="submit" class="btn btn-primary me-2">
                     <i class="fas fa-paper-plane me-2"></i> Soumettre la Demande
@@ -159,29 +152,44 @@
         const duplicataFields = document.getElementById('duplicataFields');
 
         function toggleFields() {
+            // Get all 'required' fields within each section
+            const newRequestInputs = newRequestFields.querySelectorAll('input, select');
+            const duplicataInputs = duplicataFields.querySelectorAll('input, select');
+
             if (duplicataRadio.checked) {
                 newRequestFields.style.display = 'none';
                 duplicataFields.style.display = 'block';
 
-                // Enlever les required sur champs nouvelle demande
-                newRequestFields.querySelectorAll('input, select').forEach(input => {
+                // Remove 'required' from new request fields
+                newRequestInputs.forEach(input => {
                     input.removeAttribute('required');
                 });
-                // Rendre obligatoire le numéro de registre pour duplicata
-                duplicataFields.querySelector('input[name="registry_number"]').setAttribute('required', 'required');
-                duplicataFields.querySelector('input[name="idFront"]').setAttribute('required', 'required');
+
+                // Add 'required' to duplicata fields
+                duplicataInputs.forEach(input => {
+                    input.setAttribute('required', 'required');
+                });
             } else {
                 newRequestFields.style.display = 'block';
                 duplicataFields.style.display = 'none';
 
-                // Remettre required sur champs nouvelle demande
-                newRequestFields.querySelectorAll('input, select').forEach(input => {
+                // Add 'required' back to new request fields
+                newRequestInputs.forEach(input => {
                     input.setAttribute('required', 'required');
                 });
-                // Retirer required sur duplicata
-                duplicataFields.querySelector('input[name="registry_number"]').removeAttribute('required');
-                duplicataFields.querySelector('input[name="idFront"]').removeAttribute('required');
+
+                // Remove 'required' from duplicata fields
+                duplicataInputs.forEach(input => {
+                    input.removeAttribute('required');
+                });
             }
+
+            // Manually remove 'is-invalid' class when fields are hidden/shown
+            // This prevents validation errors from persisting on hidden fields
+            document.querySelectorAll('.is-invalid').forEach(field => {
+                field.classList.remove('is-invalid');
+            });
+            document.getElementById('marriageCertForm').classList.remove('was-validated');
         }
 
         newRequestRadio.addEventListener('change', toggleFields);
@@ -215,7 +223,8 @@
             form.classList.add('was-validated');
         });
 
-        toggleFields(); // Initialisation
+        // Initial call to set the correct state based on old input or default
+        toggleFields();
     });
 </script>
 
