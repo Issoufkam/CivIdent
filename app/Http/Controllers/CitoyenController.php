@@ -316,9 +316,9 @@ class CitoyenController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SECTION TÉLÉCHARGEMENT ET DUPLICATA
+    | SECTION TÉLÉCHARGEMENT ET PRÉVISUALISATION
     |--------------------------------------------------------------------------
-    | Gère le téléchargement des documents et la demande de duplicata.
+    | Gère le téléchargement des documents et l'affichage des pages de détails.
     */
 
     /**
@@ -357,10 +357,11 @@ class CitoyenController extends Controller
     }
 
     /**
-     * Affiche un document PDF en ligne dans le navigateur pour prévisualisation.
+     * Affiche une vue HTML détaillée du document pour prévisualisation.
+     * Cette méthode remplace l'ancienne logique de streaming PDF direct pour cette route.
      *
      * @param \App\Models\Document $document
-     * @return \Symfony\Component\HttpFoundation\StreamedResponse|\Illuminate\Http\RedirectResponse
+     * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
      */
     public function preview(Document $document) // Renommé et modifié pour retourner une vue HTML
     {
@@ -376,9 +377,12 @@ class CitoyenController extends Controller
             'document' => $document,
             'metadata' => $document->metadata,
             'citoyen' => $document->user,
-            'agent' => $document->agent, // Doit contenir l'agent associé
+            'agent' => $document->agent,
             'commune' => $document->commune,
+            // Assurez-vous que la relation 'agent' est chargée sur le document
+            // si elle n'est pas déjà chargée, ajoutez $document->load('agent'); ici.
             'agentSignaturePath' => $document->agent ? $this->getAgentSignaturePath($document->agent->id) : null,
+            // Ajoutez d'autres données si vos templates HTML en ont besoin
         ];
 
         // Déterminez la vue Blade à utiliser en fonction du type de document
@@ -396,13 +400,6 @@ class CitoyenController extends Controller
 
         // Retourne la vue HTML spécifique au document
         return view($viewName, $data);
-    }
-
-    private function getAgentSignaturePath(int $agentId): ?string
-    {
-        // Cherche la signature dans storage/app/public/signatures
-        $path = self::SIGNATURES_DIR . '/' . $agentId . '.png';
-        return Storage::disk('public')->exists($path) ? Storage::disk('public')->url($path) : null;
     }
 
 
@@ -1180,10 +1177,10 @@ class CitoyenController extends Controller
      * @param int $agentId L'ID de l'agent dont on veut la signature.
      * @return string|null Le chemin URL public de la signature, ou null si non trouvée.
      */
-    // private function getAgentSignaturePath(int $agentId): ?string
-    // {
-    //     // Cherche la signature dans storage/app/public/signatures
-    //     $path = self::SIGNATURES_DIR . '/' . $agentId . '.png';
-    //     return Storage::disk('public')->exists($path) ? Storage::disk('public')->url($path) : null;
-    // }
+    private function getAgentSignaturePath(int $agentId): ?string
+    {
+        // Cherche la signature dans storage/app/public/signatures
+        $path = self::SIGNATURES_DIR . '/' . $agentId . '.png';
+        return Storage::disk('public')->exists($path) ? Storage::disk('public')->url($path) : null;
+    }
 }
